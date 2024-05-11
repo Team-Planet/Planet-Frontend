@@ -1,33 +1,46 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import { useDispatch, useSelector } from 'react-redux'
+import { setUserInformation } from './features/user/userSlice'
+import { signIn } from './services/userService';
+import { useState } from 'react';
+import { Alert } from '@mui/material';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const userInformation = useSelector(state => state.user.userInformation);
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [validationErrors, setValidationErrors] = useState([]);
+
+  const onButtonClick = async function (e) {
+    const result = await signIn(email, password);
+    setValidationErrors(result.header.validationMessages);
+  }
 
   return (
     <>
       <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        {validationErrors.map((val, index) =>
+          <div key={index}>
+            <Alert severity="error">{val.message}</Alert>
+          </div>
+        )}
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
+      <div>
+        <label>Email : </label>
+        <input onChange={e => setEmail(e.target.value)} />
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <div>
+        <label>Password : </label>
+        <input onChange={e => setPassword(e.target.value)} />
+      </div>
+      <button onClick={onButtonClick}>Sign In</button>
+      {userInformation &&
+        <div>
+          <span>{userInformation.name}</span>
+          <span>{userInformation.email}</span>
+        </div>
+      }
     </>
   )
 }
