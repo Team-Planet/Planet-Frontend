@@ -1,22 +1,9 @@
-import axios from "axios";
-
-const baseUrl = "http://localhost:5000";
+import api from "./api";
 
 const userApi = {
-    signIn: async function(email, password) {
-        try {
-            const url = `${baseUrl}/users/signin`;
-            const response = await axios.post(url, {
-                email,
-                password
-            });
-    
-            return response;
-        } catch(e) {
-            console.error(e);
-            return null;
-        }
-    }
+    signIn: async (email, password) => await api.post("Users/SignIn", {email,password}),
+    signUp: async (body) => await api.post("Users/SignUp", body),
+    changePassword: async (body) => await api.post("Users/ChangePassword", body)
 }
 
 export default userApi;
