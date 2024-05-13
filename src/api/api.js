@@ -57,7 +57,9 @@ async function sendSignInRefreshRequest() {
 const api = {
     get: async function (path, params = {}) {
         try {
-            const response = await ax.get(path, params);
+            const response = await ax.get(path, {
+                params
+            });
 
             return parseApiResponse(response);
         } catch (e) {
