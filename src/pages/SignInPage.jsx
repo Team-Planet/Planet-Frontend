@@ -1,9 +1,7 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Box, Grid, TextField, Button, Link, Checkbox, FormGroup, FormControlLabel, Typography } from '@mui/material'
 
-export default function LoginPage() {
-
-    const [rememberMe, setRememberMe] = useState(true);
+export default function SignInPage() {
 
     return (
         <Grid container style={containerStyle} >
@@ -31,5 +29,6 @@ const containerStyle = {
     justifyContent: "center",
     alignItems: "center",
     height: "100vh",
-    padding: "1rem"
+    padding: "1rem",
+    
 }
