@@ -1,4 +1,6 @@
 import axios from "axios";
+import { store } from "../data/store";
+import { authenticate, revoke } from "../data/userSlice";
 
 const ax = axios.create({
     baseURL: "http://localhost:5000/",
@@ -21,11 +23,12 @@ ax.interceptors.response.use(function (response) {
 
     return response;
 }, async function (error) {
-
     if (error.response.status === 401 && await sendSignInRefreshRequest()) {
+        store.dispatch(authenticate());
         return ax(error.config);
     }
     
+    store.dispatch(revoke());
     return Promise.reject(error);
 });
 

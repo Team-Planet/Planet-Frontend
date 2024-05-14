@@ -1,10 +1,10 @@
-import { store } from "../app/store";
-import { setUserInformation } from "../features/user/userSlice";
+import { store } from "../data/store";
+import { authenticate, setUserInformation } from "../data/userSlice";
 import userApi from "../api/userApi";
 import { jwtDecode } from "jwt-decode";
-import SignUpPage from "../pages/SignUpPage";
 export async function signIn(email, password) {
     const response = await userApi.signIn(email, password);
+    debugger;
 
     if(response.isSuccess) {
         localStorage.setItem("accessToken", response.body.accessToken);
@@ -12,6 +12,7 @@ export async function signIn(email, password) {
 
         const {sub, name} = jwtDecode(response.body.accessToken);
         store.dispatch(setUserInformation({sub, name, email}));
+        store.dispatch(authenticate());
     }
 
     return response;

@@ -16,7 +16,7 @@ const userBoardStyle = {
 
 export default function UserBoard({boardId, title}) {
   return (
-    <Box boardId={boardId} style={userBoardStyle}>
+    <Box style={userBoardStyle}>
         {title}
     </Box>
   )

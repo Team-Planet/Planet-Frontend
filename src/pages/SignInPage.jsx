@@ -1,19 +1,30 @@
-import React from "react";
+import React, {useState} from "react";
 import {
   Box,
   Grid,
   TextField,
   Button,
   Link,
-  Checkbox,
   FormGroup,
-  FormControlLabel,
   Typography,
 } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
+import { signIn } from "../services/userService";
 
 export default function SignInPage() {
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  async function handleSignIn(event) {
+    const response = await signIn(email, password);
+    setIsSuccess(response.isSuccess);
+  }
+
+
   return (
+    <>
     <Grid container style={containerStyle}>
       <Grid item xs={12} sm={8} md={4} lg={3}>
         <Box>
@@ -27,6 +38,7 @@ export default function SignInPage() {
               label="E-Posta adresi"
               type="email"
               margin="dense"
+              onChange={e => setEmail(e.target.value)}
             />
           </FormGroup>
           <FormGroup sx={{ marginBottom: 1 }}>
@@ -36,6 +48,7 @@ export default function SignInPage() {
               label="Şifre"
               type="password"
               margin="dense"
+              onChange = {e => setPassword(e.target.value)}
             />
           </FormGroup>
           <Link component={RouterLink} underline="none" to="/SignUpPage">
@@ -44,12 +57,15 @@ export default function SignInPage() {
           <Button
             style={{ marginLeft: "auto", display: "block" }}
             variant="contained"
+            onClick={handleSignIn}
           >
             GİRİŞ YAP
           </Button>
         </Box>
       </Grid>
     </Grid>
+    
+    </>
   );
 }
 

@@ -3,8 +3,10 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import UserBoard from '../components/UserBoard';
 import { getUserBoards } from '../services/boardService';
+import { redirect } from 'react-router-dom';
 
 export default function HomePage() {
+  const isAuthenticated = useSelector(state => state.user.isAuthenticated);
   const userBoards = useSelector(state => state.board.userBoards);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageCount, setPageCount] = useState(1);
@@ -40,9 +42,9 @@ export default function HomePage() {
           </Container>
         </Grid>
         <Grid item md={4}>
-
         </Grid>
       </Grid>
+      <Box>{isAuthenticated ? "girdi" : "girmedi"}</Box>
     </>
   )
 }
