@@ -1,7 +1,8 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, current } from "@reduxjs/toolkit";
 
 const initialState = {
-    userBoards: []
+    userBoards: [],
+    currentBoard: null
 }
 
 export const boardSlice = createSlice({
@@ -11,8 +12,16 @@ export const boardSlice = createSlice({
         setUserBoards(state, action) {
             state.userBoards = action.payload;
         },
+        setCurrentBoard(state, action) {
+            state.currentBoard = action.payload;
+        },
+        setListCards(state, action) {
+            const currentBoard = state.currentBoard;
+            currentBoard.lists.find(l => l.id === action.payload.listId).cards = action.payload.cards;
+            state.currentBoard = currentBoard;
+        }
     }
 });
 
-export const { setUserBoards } = boardSlice.actions;
+export const { setUserBoards, setCurrentBoard, setListCards } = boardSlice.actions;
 export default boardSlice.reducer;

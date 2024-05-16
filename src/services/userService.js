@@ -4,7 +4,6 @@ import userApi from "../api/userApi";
 import { jwtDecode } from "jwt-decode";
 export async function signIn(email, password) {
     const response = await userApi.signIn(email, password);
-    debugger;
 
     if(response.isSuccess) {
         localStorage.setItem("accessToken", response.body.accessToken);

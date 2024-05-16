@@ -20,7 +20,7 @@ export default function HomePage() {
 
   useEffect(() => {
     fetchData();
-  }, [currentPage, pageCount]);
+  }, [currentPage]);
 
   return (
     <>
