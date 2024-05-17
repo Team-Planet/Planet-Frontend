@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { getListCards } from "../services/cardService";
 import Memberlist from "../components/Memberlist";
-import CardModal from "../components/CardModal";
+
 export default function BoardPage() {
   const { id } = useParams();
   const [isLoading, setIsLoading] = useState(true);
@@ -19,8 +19,6 @@ export default function BoardPage() {
     const listCardPromises = response.body.lists.map((l) => getListCards(l.id));
     const listCards = await Promise.all(listCardPromises);
     setIsLoading(!response.isSuccess);
-    setMembers(response.body.members);
-    //setMembers(currentBoard.members);
   }
 
   function handleOnDragEnd(result) {}
