@@ -6,13 +6,14 @@ import { useSelector } from "react-redux";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { getListCards } from "../services/cardService";
 import Memberlist from "../components/Memberlist";
-
+import CardModal from "../components/CardModal";
 export default function BoardPage() {
   const { id } = useParams();
   const [isLoading, setIsLoading] = useState(true);
   const currentBoard = useSelector((state) => state.board.currentBoard);
   const [members, setMembers] = useState([]);
-
+  const [stateOfCard, setStateOfCard] = useState(false);
+  const [cardId, setCardId] = useState('');
   async function fetchData() {
     const response = await getCurrentBoard(id);
     const listCardPromises = response.body.lists.map((l) => getListCards(l.id));
@@ -43,8 +44,12 @@ export default function BoardPage() {
     );
   }
 
+  const handleCardClose = () =>{
+    setStateOfCard(false);
+  }
   return (
     <>
+      {<CardModal cardId = {cardId} state = {stateOfCard} handleClose={handleCardClose}/>}
       <Memberlist members={members} />
       <DragDropContext onDragEnd={handleOnDragEnd}>
         {currentBoard.lists.map((list, index) => (
@@ -70,6 +75,10 @@ export default function BoardPage() {
                               ref={innerRef}
                               {...draggableProps}
                               {...dragHandleProps}
+                              onClick={() => {
+                                setStateOfCard(true);
+                                setCardId(card.id)
+                              }}
                             >
                               <div>{card.title}</div>
                             </li>
