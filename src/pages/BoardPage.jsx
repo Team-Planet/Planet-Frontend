@@ -1,21 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getCurrentBoard } from "../services/boardService";
-import { Box, CircularProgress } from "@mui/material";
+import { Box, CircularProgress, responsiveFontSizes } from "@mui/material";
 import { useSelector } from "react-redux";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { getListCards } from "../services/cardService";
+import Memberlist from "../components/Memberlist";
 
 export default function BoardPage() {
   const { id } = useParams();
   const [isLoading, setIsLoading] = useState(true);
   const currentBoard = useSelector((state) => state.board.currentBoard);
+  const [members, setMembers] = useState([]);
 
   async function fetchData() {
     const response = await getCurrentBoard(id);
     const listCardPromises = response.body.lists.map((l) => getListCards(l.id));
     const listCards = await Promise.all(listCardPromises);
     setIsLoading(!response.isSuccess);
+    setMembers(response.body.members);
+    //setMembers(currentBoard.members);
   }
 
   function handleOnDragEnd(result) {}
@@ -41,6 +45,7 @@ export default function BoardPage() {
 
   return (
     <>
+      <Memberlist members={members} />
       <DragDropContext onDragEnd={handleOnDragEnd}>
         {currentBoard.lists.map((list, index) => (
           <Droppable key={list.id.toString()} droppableId={list.id.toString()}>
