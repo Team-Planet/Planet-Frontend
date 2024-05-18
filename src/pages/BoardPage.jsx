@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getCurrentBoard } from "../services/boardService";
-import { Box, CircularProgress, Grid, Stack } from "@mui/material";
+import { Box, CircularProgress, Stack } from "@mui/material";
 import { useSelector } from "react-redux";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { getListCards } from "../services/cardService";
-import MemberList from "../components/MemberList";
 import BoardList from "../components/BoardList";
 import ListCard from "../components/ListCard";
 
@@ -19,13 +18,13 @@ export default function BoardPage() {
     const listCardPromises = response.body.lists.map((l) => getListCards(l.id));
     const listCards = await Promise.all(listCardPromises);
     setIsLoading(!response.isSuccess);
-    console.log(currentBoard);
   }
 
   function handleOnDragEnd(result) {}
 
   useEffect(() => {
     fetchData();
+
   }, []);
 
   if (isLoading) {
@@ -47,24 +46,29 @@ export default function BoardPage() {
     <>
       <DragDropContext onDragEnd={handleOnDragEnd}>
         <Stack direction="row" spacing={3}>
-        {currentBoard.lists?.map((list) => (
-          <Droppable key={list.id.toString()} droppableId={list.id.toString()}>
-            {(provided) => (
-              <BoardList provided={provided}>
-                {list.cards?.map((card) => 
-                  <Draggable
-                    key={card.id.toString()}
-                    draggableId={card.id.toString()}
-                    index={card.order}
-                  > 
-                    {(provided) => <ListCard card={card} provided={provided} />}
-                  </Draggable>
-                )}
-                {provided.placeholder}
-              </BoardList>
-            )}
-          </Droppable>
-        ))}
+          {currentBoard.lists?.map((list) => (
+            <Droppable
+              key={list.id.toString()}
+              droppableId={list.id.toString()}
+            >
+              {(provided) => (
+                <BoardList list={list} provided={provided}>
+                  {list.cards?.map((card) => (
+                    <Draggable
+                      key={card.id.toString()}
+                      draggableId={card.id.toString()}
+                      index={card.order}
+                    >
+                      {(provided) => (
+                        <ListCard card={card} provided={provided} />
+                      )}
+                    </Draggable>
+                  ))}
+                  {provided.placeholder}
+                </BoardList>
+              )}
+            </Droppable>
+          ))}
         </Stack>
       </DragDropContext>
     </>
