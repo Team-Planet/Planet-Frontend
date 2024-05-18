@@ -4,7 +4,6 @@ import { getCurrentBoard } from "../services/boardService";
 import { Box, CircularProgress, Stack } from "@mui/material";
 import { useSelector } from "react-redux";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
-import { getListCards } from "../services/cardService";
 import BoardList from "../components/BoardList";
 import ListCard from "../components/ListCard";
 import { getCardInfo, getListCards } from "../services/cardService";
