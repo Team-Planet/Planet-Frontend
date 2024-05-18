@@ -7,6 +7,8 @@ import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { getListCards } from "../services/cardService";
 import BoardList from "../components/BoardList";
 import ListCard from "../components/ListCard";
+import { getCardInfo, getListCards } from "../services/cardService";
+import MemberList from "../components/MemberList";
 
 export default function BoardPage() {
   const { id } = useParams();
@@ -44,6 +46,7 @@ export default function BoardPage() {
 
   return (
     <>
+      <MemberList members={currentBoard.members} />
       <DragDropContext onDragEnd={handleOnDragEnd}>
         <Stack direction="row" spacing={3}>
           {currentBoard.lists?.map((list) => (
