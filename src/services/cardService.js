@@ -25,6 +25,16 @@ export async function getCardInfo(id) {
   if (response.isSuccess) {
     store.dispatch(setCurrentCard(response.body));
   }
+  return response;
+}
 
+export async function editCardTitle(params){
+  const response = await cardApi.editCardTitle({
+    cardId: params.cardId,
+    title: params.title
+  });
+  if(response.isSuccess){
+    console.log("başarılı");
+  }
   return response;
 }
