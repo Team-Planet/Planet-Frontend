@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import React from "react";
 
-export default function Memberlist({ members }) {
+export default function MemberList({ members }) {
   return (
     <Box>
       <h2>Board Members</h2>

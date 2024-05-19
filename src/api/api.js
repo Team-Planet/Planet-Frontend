@@ -3,7 +3,7 @@ import { store } from "../data/store";
 import { authenticate, revoke } from "../data/userSlice";
 
 const ax = axios.create({
-    baseURL: "http://localhost:5000/",
+    baseURL: "https://planet-api-test.emreozgenc.com/",
 });
 
 ax.interceptors.request.use(function (config) {
