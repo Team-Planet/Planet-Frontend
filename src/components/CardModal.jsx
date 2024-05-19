@@ -52,6 +52,15 @@ export default function CardModal({ cardId, handleClose, state }) {
     }
   }, [state]);
 
+  let timeOut;
+
+  useEffect(() => {
+    timeOut = setTimeout(() => {
+      console.log("test");
+    }, 500);
+    return () => clearTimeout(timeOut);
+  }, [newTitle]);
+
   const openEditTitle = (e) => {
     setIsEditForTitle(true);
     setNewTitle(currentCard.title);

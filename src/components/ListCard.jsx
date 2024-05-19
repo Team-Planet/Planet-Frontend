@@ -13,12 +13,13 @@ function getContrastTextColor(hexcolor){
 	return (yiq >= 128) ? "black" : "white";
 }
 
-export default function ListCard({ provided, card }) {
+export default function ListCard({ provided, card, onClick }) {
   return (
     <div
       ref={provided.innerRef}
       {...provided.draggableProps}
       {...provided.dragHandleProps}
+      onClick={e => onClick(e)}
     >
     <Box sx={{border: "1px lightgray solid", borderRadius: "5px", marginBottom: 0.2}}>
       <Paper elevation={1} sx={{padding: 1}}>
