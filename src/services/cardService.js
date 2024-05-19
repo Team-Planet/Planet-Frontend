@@ -1,5 +1,5 @@
 import cardApi from "../api/cardApi";
-import { setListCards } from "../data/boardSlice";
+import { moveCardBackward, moveCardForward, setListCards } from "../data/boardSlice";
 import { setCurrentCard } from "../data/cardSlice";
 import { store } from "../data/store";
 
@@ -24,6 +24,22 @@ export async function getCardInfo(id) {
 
   if (response.isSuccess) {
     store.dispatch(setCurrentCard(response.body));
+  }
+
+  return response;
+}
+
+export async function moveCard(moveArgs) {
+  store.dispatch(moveCardForward(moveArgs));
+
+  const response = await cardApi.moveCard({
+    cardId: moveArgs.cardId,
+    newListId: moveArgs.newListId,
+    newOrder: moveArgs.newOrder,
+  });
+
+  if (!response.isSuccess) {
+    store.dispatch(moveCardBackward(moveArgs));
   }
 
   return response;
