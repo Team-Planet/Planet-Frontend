@@ -47,7 +47,7 @@ export default function BoardPage() {
         newOrder = destinationList.cards[destinationIndex].order + 1024;
       }
       else {
-        newOrder = (destinationList.cards[destinationIndex - 1].order + destinationList.cards[destinationIndex].order) / 2;
+        newOrder = (destinationList.cards[destinationIndex > sourceIndex ? destinationIndex + 1 : destinationIndex - 1].order + destinationList.cards[destinationIndex].order) / 2;
       }
     }
     else {
