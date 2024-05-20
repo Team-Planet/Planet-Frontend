@@ -17,12 +17,13 @@ export default function SignInPage() {
   const [isSignedIn, setIsSignedIn] = useState(false);
 
   async function handleSignIn(event) {
+    event.preventDefault();
     const response = await signIn(email, password);
     setIsSignedIn(response.isSuccess);
   }
 
   return (
-    <>
+    <form onSubmit={handleSignIn}>
       <Grid container style={containerStyle}>
         <Grid item xs={12} sm={8} md={4} lg={3}>
           <Box>
@@ -55,7 +56,7 @@ export default function SignInPage() {
             <Button
               style={{ marginLeft: "auto", display: "block" }}
               variant="contained"
-              onClick={handleSignIn}
+              type="submit"
             >
               GİRİŞ YAP
             </Button>
@@ -63,7 +64,7 @@ export default function SignInPage() {
         </Grid>
       </Grid>
       {isSignedIn && <Navigate to="/" />}
-    </>
+    </form>
   );
 }
 

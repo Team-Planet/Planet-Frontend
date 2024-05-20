@@ -2,6 +2,7 @@ import { store } from "../data/store";
 import { authenticate, setUserInformation } from "../data/userSlice";
 import userApi from "../api/userApi";
 import { jwtDecode } from "jwt-decode";
+import { pushNotification } from "../data/notificationSlice";
 export async function signIn(email, password) {
     const response = await userApi.signIn(email, password);
 
@@ -12,6 +13,7 @@ export async function signIn(email, password) {
         const {sub, name} = jwtDecode(response.body.accessToken);
         store.dispatch(setUserInformation({sub, name, email}));
         store.dispatch(authenticate());
+        store.dispatch(pushNotification({severity: "success", duration: 3000, content: response.message}))
     }
 
     return response;
