@@ -5,9 +5,15 @@ import {
   CircularProgress,
   dividerClasses,
   TextField,
+  Avatar,
+  AvatarGroup,
   colors,
 } from "@mui/material";
-import { getCardInfo, editCardTitle } from "../services/cardService";
+import {
+  getCardInfo,
+  editCardTitle,
+  editCardDesc,
+} from "../services/cardService";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 export default function CardModal({ cardId, handleClose, state }) {
@@ -15,10 +21,22 @@ export default function CardModal({ cardId, handleClose, state }) {
   const currentCard = useSelector((state) => state.card.currentCard);
   const [isEditForTitle, setIsEditForTitle] = useState(false);
   const [newTitle, setNewTitle] = useState("");
+  const [isEditForDesc, setIsEditForDesc] = useState(false);
+  const [newDesc, setNewDesc] = useState("");
+  const [initials, setInitials] = useState([]);
   async function fetchData() {
     const cardResponse = await getCardInfo(cardId);
     if (cardResponse.isSuccess) {
       setIsLoading(!cardResponse.isSuccess);
+      const initialArray = cardResponse.body.users.map((user) => {
+        const names = user.fullName ? user.fullName.split(" ") : [];
+        const firstNameInitial = names[0] ? names[0][0].toUpperCase() : "";
+        const lastNameInitial =
+          names.length > 1 ? names[names.length - 1][0].toUpperCase() : "";
+        return `${firstNameInitial}${lastNameInitial}`;
+      });
+      setInitials(initialArray);
+      console.log(initials);
     }
   }
   const styleOfBox = {
@@ -45,41 +63,57 @@ export default function CardModal({ cardId, handleClose, state }) {
     padding: "5px",
     fontSize: "1.15rem",
   };
+  function getRandomColor() {
+    var letters = "0123456789ABCDEF";
+    var color = "#";
+    for (var i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  }
   useEffect(() => {
     if (state) {
       setIsEditForTitle(false);
+      setIsEditForDesc(false);
       fetchData();
     }
   }, [state]);
 
-  let timeOut;
-
-  useEffect(() => {
-    timeOut = setTimeout(() => {
-      console.log("test");
-    }, 500);
-    return () => clearTimeout(timeOut);
-  }, [newTitle]);
-
-  const openEditTitle = (e) => {
+  const openEditTitle = () => {
     setIsEditForTitle(true);
     setNewTitle(currentCard.title);
   };
 
-  const editTitle = async (event) => {
-    console.log(event.which);
+  const openEditDesc = () => {
+    setIsEditForDesc(true);
+    setNewDesc(currentCard.description);
+  };
+
+  const editElements = async (event, element) => {
     if (
       event.keyCode === 13 ||
       (event.relatedTarget && event.relatedTarget.nodeName !== "BODY")
     ) {
-      const editTitleResponse = await editCardTitle({
-        cardId: cardId,
-        title: newTitle,
-      });
-      if (editTitleResponse.isSuccess) {
-        fetchData();
+      switch (element) {
+        case "title":
+          setIsEditForTitle(false);
+          const editTitleResponse = await editCardTitle({
+            cardId: cardId,
+            title: newTitle,
+          });
+          if (editTitleResponse.isSuccess) {
+            fetchData();
+          }
+        case "desc":
+          setIsEditForDesc(false);
+          const editDescResponse = await editCardDesc({
+            cardId: cardId,
+            description: newDesc,
+          });
+          if (editDescResponse.isSuccess) {
+            fetchData();
+          }
       }
-      setIsEditForTitle(false);
     }
   };
   if (isLoading && state) {
@@ -111,9 +145,9 @@ export default function CardModal({ cardId, handleClose, state }) {
               variant="standard"
               InputProps={{ disableUnderline: true }}
               sx={{ input: styleOfTextField }}
-              onKeyDown={editTitle}
+              onKeyDown={(e) => editElements(e, "title")}
               onChange={(e) => setNewTitle(e.target.value)}
-              onBlur={editTitle}
+              onBlur={(e) => editElements(e, "title")}
               defaultValue={currentCard.title}
             />
           ) : (
@@ -126,10 +160,38 @@ export default function CardModal({ cardId, handleClose, state }) {
               {currentCard.title}
             </Typography>
           )}
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            {currentCard.description}
-          </Typography>
-          <Typography>{cardId}</Typography>
+          {isEditForDesc && currentCard.description !== '' ? (
+            <TextField
+              id="standard-basic"
+              variant="standard"
+              InputProps={{ disableUnderline: true }}
+              sx={{ input: styleOfTextField }}
+              onKeyDown={(e) => editElements(e, "desc")}
+              onChange={(e) => setNewDesc(e.target.value)}
+              onBlur={(e) => editElements(e, "desc")}
+              defaultValue={currentCard.description}
+            />
+          ) : (
+            <Typography
+              onClick={openEditDesc}
+              id="modal-modal-description"
+              sx={{ mt: 2 }}
+            >
+              {currentCard.description}
+            </Typography>
+          )}
+
+          <AvatarGroup max={3}>
+            {initials.map((initial, index) => (
+              <Avatar
+                key={index}
+                alt={initial}
+                sx={{ bgcolor: getRandomColor() }}
+              >
+                {initial}
+              </Avatar>
+            ))}
+          </AvatarGroup>
         </Box>
       </Modal>
     );
