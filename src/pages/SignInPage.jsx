@@ -7,18 +7,27 @@ import {
   Link,
   FormGroup,
   Typography,
+  CircularProgress,
 } from "@mui/material";
 import { Link as RouterLink, Navigate } from "react-router-dom";
 import { signIn } from "../services/userService";
+import ButtonLoading from "../components/ButtonLoading";
 
 export default function SignInPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [isSignedIn, setIsSignedIn] = useState(false);
+  const [validationMessages, setValidationMessages] = useState([]);
 
   async function handleSignIn(event) {
+    if(isLoading) return;
+
     event.preventDefault();
+    setIsLoading(true);
     const response = await signIn(email, password);
+    setValidationMessages(response.validationMessages);
+    setIsLoading(false);
     setIsSignedIn(response.isSuccess);
   }
 
@@ -38,6 +47,13 @@ export default function SignInPage() {
                 type="email"
                 margin="dense"
                 onChange={(e) => setEmail(e.target.value)}
+                error={validationMessages.some((m) =>
+                  m.code.startsWith("Email")
+                )}
+                helperText={
+                  validationMessages.find((m) => m.code.startsWith("Email"))
+                    ?.message
+                }
               />
             </FormGroup>
             <FormGroup sx={{ marginBottom: 1 }}>
@@ -48,18 +64,22 @@ export default function SignInPage() {
                 type="password"
                 margin="dense"
                 onChange={(e) => setPassword(e.target.value)}
+                error={validationMessages.some((m) =>
+                  m.code.startsWith("Password")
+                )}
+                helperText={
+                  validationMessages.find((m) => m.code.startsWith("Password"))
+                    ?.message
+                }
               />
             </FormGroup>
-            <Link component={RouterLink} underline="none" to="/SignUpPage">
-              Üye değil misin? Kayıt ol!
-            </Link>
-            <Button
-              style={{ marginLeft: "auto", display: "block" }}
-              variant="contained"
+            <RouterLink to="/SignUp">Üye değil misin? Kayıt ol</RouterLink>
+            <ButtonLoading
+              containerSx={{ marginLeft: "auto", width: "fit-content" }}
               type="submit"
-            >
-              GİRİŞ YAP
-            </Button>
+              content="GİRİŞ YAP"
+              loading={isLoading}
+            />
           </Box>
         </Grid>
       </Grid>
