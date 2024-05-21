@@ -9,7 +9,6 @@ import { jwtDecode } from "jwt-decode";
 import { useDispatch, useSelector } from "react-redux";
 import { authenticate, revoke } from "./data/userSlice";
 import BoardPage from "./pages/BoardPage";
-import { pushNotification } from "./data/notificationSlice";
 
 function App() {
   const dispatch = useDispatch();
