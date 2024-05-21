@@ -21,8 +21,8 @@ export default function ListCard({ provided, card, onClick }) {
       {...provided.dragHandleProps}
       onClick={e => onClick(e)}
     >
-    <Box sx={{border: "1px lightgray solid", borderRadius: "5px", marginBottom: 0.2}}>
-      <Paper elevation={1} sx={{padding: 1}}>
+    <Box sx={{ marginBottom: 0.8}}>
+      <Box elevation={0} sx={{padding: 1, backgroundColor: "#f1faee", borderRadius: 2}}>
         <Stack direction="row" spacing={1} mb={1}>
           {card.labels.map((label, index) => 
             <Box p={0.4} style={{borderRadius: "5px"}} key={index} sx={{ backgroundColor: `${label.colorCode}` }}>
@@ -35,7 +35,7 @@ export default function ListCard({ provided, card, onClick }) {
         <Box>
           <Typography>{card.title}</Typography>
         </Box>
-      </Paper>
+      </Box>
     </Box>
     </div>
   );

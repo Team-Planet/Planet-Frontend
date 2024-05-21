@@ -3,11 +3,13 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import SignInPage from "./pages/SignInPage";
 import HomePage from "./pages/HomePage";
 import SignUpPage from "./pages/SignUpPage";
+import Notification from "./components/Notification";
 import { useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import { useDispatch, useSelector } from "react-redux";
 import { authenticate, revoke } from "./data/userSlice";
 import BoardPage from "./pages/BoardPage";
+import { pushNotification } from "./data/notificationSlice";
 
 function App() {
   const dispatch = useDispatch();
@@ -31,6 +33,7 @@ function App() {
         <Route path="/Boards/:id" element={<BoardPage />} />
       </Routes>
       {!isAuthenticated && <Navigate to="/SignIn" />}
+      {<Notification />}
     </>
   );
 }
