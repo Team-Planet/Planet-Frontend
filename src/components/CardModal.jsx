@@ -1,9 +1,16 @@
+import React, { useEffect, useState } from "react";
 import {
   Modal,
   Typography,
   Box,
   CircularProgress,
   TextField,
+  Button,
+} from "@mui/material";
+import { getCardInfo, editCardTitle, editCardDesc } from "../services/cardService";
+import { useSelector } from "react-redux";
+import LabelSelector from "./LabelSelector";
+import {
   Avatar,
   AvatarGroup,
   List,
@@ -11,13 +18,6 @@ import {
   Checkbox,
   ListItemText
 } from "@mui/material";
-import {
-  getCardInfo,
-  editCardTitle,
-  editCardDesc,
-} from "../services/cardService";
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs, { Dayjs } from "dayjs";
@@ -27,6 +27,8 @@ export default function CardModal({ cardId, handleClose, state }) {
   const currentCard = useSelector((state) => state.card.currentCard);
   const [isEditForTitle, setIsEditForTitle] = useState(false);
   const [newTitle, setNewTitle] = useState("");
+  const [isLabelSelectorOpen, setIsLabelSelectorOpen] = useState(false);
+
   const [isEditForDesc, setIsEditForDesc] = useState(false);
   const [newDesc, setNewDesc] = useState("");
   const [initials, setInitials] = useState([]);
@@ -64,6 +66,7 @@ export default function CardModal({ cardId, handleClose, state }) {
       debugger;
     }
   }
+
   const styleOfBox = {
     position: "absolute",
     top: "50%",
@@ -186,6 +189,23 @@ export default function CardModal({ cardId, handleClose, state }) {
               {currentCard.title}
             </Typography>
           )}
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            {currentCard.description}
+          </Typography>
+          <Typography>{cardId}</Typography>
+          <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
+            <Button
+              variant="contained"
+              onClick={() => setIsLabelSelectorOpen(true)}
+            >
+              Labels
+            </Button>
+          </Box>
+          <LabelSelector
+            cardId={cardId}
+            open={isLabelSelectorOpen}
+            onClose={() => setIsLabelSelectorOpen(false)}
+          />
           {isEditForDesc && currentCard.description !== "" ? (
             <TextField
               id="standard-basic"
