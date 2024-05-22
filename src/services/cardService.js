@@ -39,9 +39,22 @@ export async function editCardTitle(params) {
   });
   if (response.isSuccess) {
     console.log("başarılı");
+    //board page güncelleme işlemini yap
   }
   return response;
 }
+
+export async function editCardDesc(params){
+  const response = await cardApi.editCardDesc({
+    cardId: params.cardId,
+    description: params.description
+  });
+  if(response.isSuccess){
+    console.log("başarılı");
+  }
+  return response;
+}
+
 
 export async function moveCard(moveArgs) {
   store.dispatch(moveCardForward(moveArgs));
