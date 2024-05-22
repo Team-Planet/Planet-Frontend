@@ -7,7 +7,7 @@ import {
   TextField,
   Button,
 } from "@mui/material";
-import { getCardInfo, editCardTitle } from "../services/cardService";
+import { getCardInfo, editCardTitle, editCardDesc } from "../services/cardService";
 import { useSelector } from "react-redux";
 import LabelSelector from "./LabelSelector";
 import {
@@ -18,13 +18,6 @@ import {
   Checkbox,
   ListItemText
 } from "@mui/material";
-import {
-  getCardInfo,
-  editCardTitle,
-  editCardDesc,
-} from "../services/cardService";
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs, { Dayjs } from "dayjs";

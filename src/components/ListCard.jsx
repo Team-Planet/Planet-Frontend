@@ -23,7 +23,7 @@ export default function ListCard({ provided, card, onClick }) {
     >
     <Box sx={{ marginBottom: 0.8}}>
       <Box elevation={0} sx={{padding: 1, backgroundColor: "#f1faee", borderRadius: 2}}>
-        <Stack direction="row" spacing={1} mb={1}>
+        <Stack direction="row" spacing={1} mb={1} flexWrap="wrap" useFlexGap>
           {card.labels.map((label, index) => 
             <Box p={0.4} style={{borderRadius: "5px"}} key={index} sx={{ backgroundColor: `${label.colorCode}` }}>
                 <Typography fontSize={12} fontWeight={500} color={getContrastTextColor(label.colorCode)}>

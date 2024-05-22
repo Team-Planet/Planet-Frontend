@@ -40,6 +40,15 @@ const LabelSelector = ({ cardId, open, onClose }) => {
     );
 
     const response = await (!isSelected ? addLabelToCard(cardId, labelId) : removeLabelFromCard(cardId, labelId));
+
+    if(!response.isSuccess) {
+      if(isSelected) {
+        setSelectedLabels((prevSelected) => [...prevSelected, labelId]);
+      }
+      else {
+        setSelectedLabels((prevSelected) => prevSelected.filter(id => id !== labelId));
+      }
+    }
   };
 
   const styleOfBox = {
