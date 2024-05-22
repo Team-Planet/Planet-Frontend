@@ -3,11 +3,13 @@ import {
   Typography,
   Box,
   CircularProgress,
-  dividerClasses,
   TextField,
   Avatar,
   AvatarGroup,
-  colors,
+  List,
+  ListItem,
+  Checkbox,
+  ListItemText
 } from "@mui/material";
 import {
   getCardInfo,
@@ -16,6 +18,10 @@ import {
 } from "../services/cardService";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs, { Dayjs } from "dayjs";
+import {DemoContainer} from "@mui/x-date-pickers/internals/demo"
 export default function CardModal({ cardId, handleClose, state }) {
   const [isLoading, setIsLoading] = useState(true);
   const currentCard = useSelector((state) => state.card.currentCard);
@@ -24,6 +30,11 @@ export default function CardModal({ cardId, handleClose, state }) {
   const [isEditForDesc, setIsEditForDesc] = useState(false);
   const [newDesc, setNewDesc] = useState("");
   const [initials, setInitials] = useState([]);
+  const [checked, setChecked] = useState([]);
+  const [checkLists, setCheckLists] = useState([]);
+  const [comments, setComments] = useState([]);
+  const [endDate, setEndDate] = useState('');
+  const [startDate, setStartDate] = useState('');
   async function fetchData() {
     const cardResponse = await getCardInfo(cardId);
     if (cardResponse.isSuccess) {
@@ -36,7 +47,21 @@ export default function CardModal({ cardId, handleClose, state }) {
         return `${firstNameInitial}${lastNameInitial}`;
       });
       setInitials(initialArray);
-      console.log(initials);
+
+      const checkListsArray = cardResponse.body.checkLists.map((checkList) => ({
+        title: checkList.title,
+        items: checkList.items.map((item) => item.content),
+      }));
+      setCheckLists(checkListsArray);
+      const commentsArray = cardResponse.body.comments.map((comment) => {
+        return comment;
+      });
+      setComments(commentsArray);
+
+      setStartDate(cardResponse.body.startDate.split('T')[0]);
+      const xxx = cardResponse.body.endDate.split('T')[0] ;
+      setEndDate(cardResponse.body.endDate.split('T')[0]);
+      debugger;
     }
   }
   const styleOfBox = {
@@ -54,6 +79,7 @@ export default function CardModal({ cardId, handleClose, state }) {
     pb: 3,
     bgcolor: "#474747",
     color: "white",
+    overflow: "scroll",
   };
   const styleOfTextField = {
     color: "white",
@@ -160,7 +186,7 @@ export default function CardModal({ cardId, handleClose, state }) {
               {currentCard.title}
             </Typography>
           )}
-          {isEditForDesc && currentCard.description !== '' ? (
+          {isEditForDesc && currentCard.description !== "" ? (
             <TextField
               id="standard-basic"
               variant="standard"
@@ -192,6 +218,45 @@ export default function CardModal({ cardId, handleClose, state }) {
               </Avatar>
             ))}
           </AvatarGroup>
+          <List>
+            {checkLists.map((checkList, index) => (
+              <li key={index}>
+                <ul>
+                  <Typography>{checkList.title}</Typography>
+                  {checkList.items.map((item, itemIndex) => (
+                    <ListItem key={itemIndex}>
+                      <Checkbox
+                        edge="start"
+                        checked={item.checked}
+                        tabIndex={-1}
+                        disableRipple
+                      />
+                      <ListItemText primary={item} />
+                    </ListItem>
+                  ))}
+                </ul>
+              </li>
+            ))}
+          </List>
+          <List>
+            {comments.map((comment, index) => (
+              <li key={index}>
+                <ul>{comment.content}</ul>
+              </li>
+            ))}
+          </List>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DemoContainer components={["DatePicker", "DatePicker"]}>
+              <DatePicker
+                label="Start Date"
+                defaultValue={dayjs(startDate)}
+              />
+              <DatePicker
+                label="End Date"
+                defaultValue={dayjs(endDate)}
+              />
+            </DemoContainer>
+          </LocalizationProvider>
         </Box>
       </Modal>
     );
