@@ -3,6 +3,7 @@ import {
   moveCardBackward,
   moveCardForward,
   setListCards,
+  changeCardLabel
 } from "../data/boardSlice";
 import { setCurrentCard } from "../data/cardSlice";
 import { store } from "../data/store";
@@ -59,10 +60,20 @@ export async function moveCard(moveArgs) {
 }
 export async function addLabelToCard(cardId, boardLabelId) {
   const response = await cardApi.addLabelToCard(cardId, boardLabelId);
+
+  if(response.isSuccess) {
+    store.dispatch(changeCardLabel({cardId: cardId, boardLabelId: boardLabelId, isAdded: true}));
+  }
+
   return response;
 }
 
 export async function removeLabelFromCard(cardId, boardLabelId) {
   const response = await cardApi.removeLabelFromCard(cardId, boardLabelId);
+
+  if(response.isSuccess) {
+    store.dispatch(changeCardLabel({cardId: cardId, boardLabelId: boardLabelId, isAdded: false}));
+  }
+
   return response;
 }

@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { addLabelToCard, removeLabelFromCard } from "../services/cardService";
+import { changeCardLabel } from "../data/boardSlice";
 
 function getContrastTextColor(hexcolor) {
   if (hexcolor.indexOf("#") !== -1) {
@@ -31,7 +32,6 @@ const LabelSelector = ({ cardId, open, onClose }) => {
   );
 
   const handleLabelChange = async (labelId) => {
-    debugger;
     const isSelected = selectedLabels.includes(labelId);
     setSelectedLabels((prevSelected) =>
       isSelected
@@ -39,11 +39,7 @@ const LabelSelector = ({ cardId, open, onClose }) => {
         : [...prevSelected, labelId]
     );
 
-    if (isSelected) {
-      await removeLabelFromCard(cardId, labelId);
-    } else {
-      await addLabelToCard(cardId, labelId);
-    }
+    const response = await (!isSelected ? addLabelToCard(cardId, labelId) : removeLabelFromCard(cardId, labelId));
   };
 
   const styleOfBox = {

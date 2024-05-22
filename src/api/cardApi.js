@@ -7,9 +7,8 @@ const cardApi = {
   moveCard: async (body) => await api.post("Cards/MoveCard", body),
   addLabelToCard: async (cardId, boardLabelId) =>
     await api.post("Cards/Labels/Add", { cardId, boardLabelId }),
-  removeLabelFromCard: async (cardId, boardLabelId) => {
-    await api.post("Cards/Labels/Remove", { cardId, boardLabelId });
-  },
+  removeLabelFromCard: async (cardId, boardLabelId) =>
+    await api.post("Cards/Labels/Remove", { cardId, boardLabelId }),
 };
 
 export default cardApi;
