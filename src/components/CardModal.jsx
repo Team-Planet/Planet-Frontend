@@ -1,26 +1,30 @@
+import React, { useEffect, useState } from "react";
 import {
   Modal,
   Typography,
   Box,
   CircularProgress,
-  dividerClasses,
   TextField,
-  colors,
+  Button,
 } from "@mui/material";
 import { getCardInfo, editCardTitle } from "../services/cardService";
-import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import LabelSelector from "./LabelSelector";
+
 export default function CardModal({ cardId, handleClose, state }) {
   const [isLoading, setIsLoading] = useState(true);
   const currentCard = useSelector((state) => state.card.currentCard);
   const [isEditForTitle, setIsEditForTitle] = useState(false);
   const [newTitle, setNewTitle] = useState("");
+  const [isLabelSelectorOpen, setIsLabelSelectorOpen] = useState(false);
+
   async function fetchData() {
     const cardResponse = await getCardInfo(cardId);
     if (cardResponse.isSuccess) {
       setIsLoading(!cardResponse.isSuccess);
     }
   }
+
   const styleOfBox = {
     position: "absolute",
     top: "50%",
@@ -45,6 +49,7 @@ export default function CardModal({ cardId, handleClose, state }) {
     padding: "5px",
     fontSize: "1.15rem",
   };
+
   useEffect(() => {
     if (state) {
       setIsEditForTitle(false);
@@ -130,6 +135,19 @@ export default function CardModal({ cardId, handleClose, state }) {
             {currentCard.description}
           </Typography>
           <Typography>{cardId}</Typography>
+          <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
+            <Button
+              variant="contained"
+              onClick={() => setIsLabelSelectorOpen(true)}
+            >
+              Labels
+            </Button>
+          </Box>
+          <LabelSelector
+            cardId={cardId}
+            open={isLabelSelectorOpen}
+            onClose={() => setIsLabelSelectorOpen(false)}
+          />
         </Box>
       </Modal>
     );

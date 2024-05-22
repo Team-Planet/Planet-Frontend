@@ -1,5 +1,9 @@
 import cardApi from "../api/cardApi";
-import { moveCardBackward, moveCardForward, setListCards } from "../data/boardSlice";
+import {
+  moveCardBackward,
+  moveCardForward,
+  setListCards,
+} from "../data/boardSlice";
 import { setCurrentCard } from "../data/cardSlice";
 import { store } from "../data/store";
 
@@ -15,7 +19,6 @@ export async function getListCards(listId) {
       setListCards({ cards: response.body.items, listId: listId })
     );
   }
-
   return response;
 }
 
@@ -28,12 +31,12 @@ export async function getCardInfo(id) {
   return response;
 }
 
-export async function editCardTitle(params){
+export async function editCardTitle(params) {
   const response = await cardApi.editCardTitle({
     cardId: params.cardId,
-    title: params.title
+    title: params.title,
   });
-  if(response.isSuccess){
+  if (response.isSuccess) {
     console.log("başarılı");
   }
   return response;
@@ -52,5 +55,14 @@ export async function moveCard(moveArgs) {
     store.dispatch(moveCardBackward(moveArgs));
   }
 
+  return response;
+}
+export async function addLabelToCard(cardId, boardLabelId) {
+  const response = await cardApi.addLabelToCard(cardId, boardLabelId);
+  return response;
+}
+
+export async function removeLabelFromCard(cardId, boardLabelId) {
+  const response = await cardApi.removeLabelFromCard(cardId, boardLabelId);
   return response;
 }
