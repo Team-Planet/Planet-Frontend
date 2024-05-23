@@ -14,13 +14,14 @@ export default function BoardPage() {
   const { id } = useParams();
   const [isLoading, setIsLoading] = useState(true);
   const currentBoard = useSelector((state) => state.board.currentBoard);
+  const listCards = useSelector((state) => state.card.listCards);
   const [members, setMembers] = useState([]);
   const [stateOfCard, setStateOfCard] = useState(false);
   const [cardId, setCardId] = useState("");
   async function fetchData() {
     const response = await getCurrentBoard(id);
-    await Promise.all(response.body.lists.map((l) => getListCards(l.id)));
-    setIsLoading(!response.isSuccess);
+    await getListCards(response.body.lists.map((l) => l.id));
+    setIsLoading(false);
   }
 
   async function handleOnDragEnd(result) {
@@ -34,45 +35,43 @@ export default function BoardPage() {
 
     if (destinationId === sourceId && destinationIndex === sourceIndex) return;
 
-    const destinationList = currentBoard.lists.find(
-      (l) => l.id === destinationId
+    const destinationListCards = listCards.filter(
+      (c) => c.listId === destinationId
     );
 
-    const oldOrder = currentBoard.lists
-      .flatMap((l) => l.cards)
-      .find((c) => c.id === cardId).order;
+    const oldOrder = listCards.find((c) => c.id === cardId).order;
     let newOrder = 0;
 
     if (destinationId === sourceId) {
       if (destinationIndex === 0) {
         newOrder =
-          destinationList.cards.length > 0
-            ? destinationList.cards[0].order / 2
+          destinationListCards.length > 0
+            ? destinationListCards[0].order / 2
             : 1024;
-      } else if (destinationIndex === destinationList.cards.length - 1) {
-        newOrder = destinationList.cards[destinationIndex].order + 1024;
+      } else if (destinationIndex === destinationListCards.length - 1) {
+        newOrder = destinationListCards[destinationIndex].order + 1024;
       } else {
         newOrder =
-          (destinationList.cards[
+          (destinationListCards[
             destinationIndex > sourceIndex
               ? destinationIndex + 1
               : destinationIndex - 1
           ].order +
-            destinationList.cards[destinationIndex].order) /
+            destinationListCards[destinationIndex].order) /
           2;
       }
     } else {
       if (destinationIndex === 0) {
         newOrder =
-          destinationList.cards.length > 0
-            ? destinationList.cards[0].order / 2
+          destinationListCards.length > 0
+            ? destinationListCards[0].order / 2
             : 1024;
-      } else if (destinationIndex === destinationList.cards.length) {
-        newOrder = destinationList.cards[destinationIndex - 1].order + 1024;
+      } else if (destinationIndex === destinationListCards.length) {
+        newOrder = destinationListCards[destinationIndex - 1].order + 1024;
       } else {
         newOrder =
-          (destinationList.cards[destinationIndex - 1].order +
-            destinationList.cards[destinationIndex].order) /
+          (destinationListCards[destinationIndex - 1].order +
+            destinationListCards[destinationIndex].order) /
           2;
       }
     }
@@ -124,31 +123,33 @@ export default function BoardPage() {
       <MemberList members={members} />
       <DragDropContext onDragEnd={handleOnDragEnd}>
         <Stack direction="row" spacing={3}>
-          {currentBoard.lists?.map((list) => (
+          {currentBoard?.lists?.map((list) => (
             <Droppable
               key={list.id.toString()}
               droppableId={list.id.toString()}
             >
               {(provided) => (
                 <BoardList list={list} provided={provided}>
-                  {list.cards?.map((card, index) => (
-                    <Draggable
-                      key={card.id.toString()}
-                      draggableId={card.id.toString()}
-                      index={index}
-                    >
-                      {(provided) => (
-                        <ListCard
-                          card={card}
-                          provided={provided}
-                          onClick={(e) => {
-                            setStateOfCard(true);
-                            setCardId(card.id);
-                          }}
-                        />
-                      )}
-                    </Draggable>
-                  ))}
+                  {listCards
+                    ?.filter((c) => c.listId === list.id)
+                    .map((card, index) => (
+                      <Draggable
+                        key={card.id.toString()}
+                        draggableId={card.id.toString()}
+                        index={index}
+                      >
+                        {(provided) => (
+                          <ListCard
+                            card={card}
+                            provided={provided}
+                            onClick={(e) => {
+                              setStateOfCard(true);
+                              setCardId(card.id);
+                            }}
+                          />
+                        )}
+                      </Draggable>
+                    ))}
                   {provided.placeholder}
                 </BoardList>
               )}

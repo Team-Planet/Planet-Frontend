@@ -1,26 +1,23 @@
 import cardApi from "../api/cardApi";
-import {
-  moveCardBackward,
-  moveCardForward,
-  setListCards,
-  changeCardLabel
-} from "../data/boardSlice";
-import { setCurrentCard } from "../data/cardSlice";
+import { setCurrentCard, setListCards, moveCardBackward, moveCardForward, changeLabel} from "../data/cardSlice";
 import { store } from "../data/store";
 
-export async function getListCards(listId) {
-  const response = await cardApi.getListCards({
-    pageSize: 30,
-    currentPage: 1,
-    listId: listId,
-  });
+export async function getListCards(listIds) {
 
-  if (response.isSuccess) {
-    store.dispatch(
-      setListCards({ cards: response.body.items, listId: listId })
-    );
+  const promises = listIds.map((listId) =>
+    cardApi.getListCards({
+      pageSize: 30,
+      currentPage: 1,
+      listId: listId,
+    })
+  );
+
+  const responses = await Promise.all(promises);
+  if (responses.every(r => r.isSuccess)) {
+    store.dispatch(setListCards(responses.flatMap(r => r.body.items)));
   }
-  return response;
+
+  return responses[0];
 }
 
 export async function getCardInfo(id) {
@@ -44,19 +41,19 @@ export async function editCardTitle(params) {
   return response;
 }
 
-export async function editCardDesc(params){
+export async function editCardDesc(params) {
   const response = await cardApi.editCardDesc({
     cardId: params.cardId,
-    description: params.description
+    description: params.description,
   });
-  if(response.isSuccess){
+  if (response.isSuccess) {
     console.log("başarılı");
   }
   return response;
 }
 
-
 export async function moveCard(moveArgs) {
+  debugger;
   store.dispatch(moveCardForward(moveArgs));
 
   const response = await cardApi.moveCard({
@@ -73,9 +70,16 @@ export async function moveCard(moveArgs) {
 }
 export async function addLabelToCard(cardId, boardLabelId) {
   const response = await cardApi.addLabelToCard(cardId, boardLabelId);
+  const boardLabel = store.getState().board.currentBoard.labels.find(l => l.id === boardLabelId);
 
-  if(response.isSuccess) {
-    store.dispatch(changeCardLabel({cardId: cardId, boardLabelId: boardLabelId, isAdded: true}));
+  if (response.isSuccess) {
+    store.dispatch(
+      changeLabel({
+        cardId: cardId,
+        boardLabel: boardLabel,
+        isAdded: true,
+      })
+    );
   }
 
   return response;
@@ -83,9 +87,16 @@ export async function addLabelToCard(cardId, boardLabelId) {
 
 export async function removeLabelFromCard(cardId, boardLabelId) {
   const response = await cardApi.removeLabelFromCard(cardId, boardLabelId);
+  const boardLabel = store.getState().board.currentBoard.labels.find(l => l.id === boardLabelId);
 
-  if(response.isSuccess) {
-    store.dispatch(changeCardLabel({cardId: cardId, boardLabelId: boardLabelId, isAdded: false}));
+  if (response.isSuccess) {
+    store.dispatch(
+      changeLabel({
+        cardId: cardId,
+        boardLabel: boardLabel,
+        isAdded: false,
+      })
+    );
   }
 
   return response;
