@@ -3,6 +3,8 @@ import { Grid, Typography, FormGroup, TextField, Box } from "@mui/material";
 import { signUp } from "../services/userService";
 import ButtonLoading from "../components/ButtonLoading";
 import { Navigate } from "react-router-dom";
+import Logo from "../components/Logo";
+import background from '../assets/bg_signin_signup.jpg';
 
 export function SignUpPage() {
   const [firstName, setFirstName] = useState("");
@@ -36,9 +38,7 @@ export function SignUpPage() {
       <Grid container style={containerStyle}>
         <Grid item xs={12} sm={8} md={4} lg={3}>
           <Box sx={boxStyle}>
-            <Typography variant="h2" align="center" sx={titleStyle}>
-              Planet
-            </Typography>
+            <Logo />
             <FormGroup>
               <TextField
                 onChange={(e) => {
@@ -156,17 +156,14 @@ const containerStyle = {
   alignItems: "center",
   height: "100vh",
   padding: "1rem",
-  backgroundSize: "cover",
+  background: `url(${background})`,
+  backgroundSize: "100% auto",
+  backgroundPosition: "center bottom"
 };
 
 const boxStyle = {
-  backgroundColor: "rgba(255, 255, 255, 0.85)",
+  backgroundColor: "rgba(255, 255, 255, 1)",
   padding: "2rem",
   borderRadius: "8px",
   boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-};
-
-const titleStyle = {
-  marginBottom: "1rem",
-  color: "#333",
 };

@@ -13,6 +13,8 @@ import { Link as RouterLink, Navigate } from "react-router-dom";
 import { signIn } from "../services/userService";
 import ButtonLoading from "../components/ButtonLoading";
 import planetLogo from "../assets/planet.svg";
+import Logo from "../components/Logo";
+import background from "../assets/bg_signin_signup.jpg";
 
 export default function SignInPage() {
   const [email, setEmail] = useState("");
@@ -37,10 +39,7 @@ export default function SignInPage() {
       <Grid container style={containerStyle}>
         <Grid item xs={12} sm={8} md={4} lg={3}>
           <Box sx={boxStyle}>
-            <Typography variant="h2" align="center" sx={titleStyle}>
-              Planet
-            </Typography>
-            <img src={planetLogo} alt="" width={150} height="auto" />
+            <Logo />
             <FormGroup>
               <TextField
                 fullWidth
@@ -98,11 +97,13 @@ const containerStyle = {
   alignItems: "center",
   height: "100vh",
   padding: "1rem",
+  background: `url(${background})`,
   backgroundSize: "cover",
+  backgroundPosition: "center bottom",
 };
 
 const boxStyle = {
-  backgroundColor: "rgba(255, 255, 255, 0.85)",
+  backgroundColor: "rgba(255, 255, 255, 1)",
   padding: "2rem",
   borderRadius: "8px",
   boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
