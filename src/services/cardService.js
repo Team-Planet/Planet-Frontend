@@ -1,6 +1,29 @@
 import cardApi from "../api/cardApi";
-import { setCurrentCard, setListCards, moveCardBackward, moveCardForward, changeLabel} from "../data/cardSlice";
+import { setCurrentCard, setListCards, moveCardBackward, moveCardForward, changeLabel, createListCard} from "../data/cardSlice";
 import { store } from "../data/store";
+
+export async function createCard(listId) {
+
+  const order = store.getState().card.listCards.filter(c => c.listId === listId).reverse()[0].order + 1024;
+  const response = await cardApi.createCard(listId, "Yeni oluşturulmuş kart", order);
+
+
+  if(response.isSuccess) {
+    const payload = {
+      id: response.body.cardId,
+      title: "Yeni oluşturulmuş kart",
+      listId: listId,
+      order: order,
+      user: null,
+      fullName: null,
+      labels: []
+    }
+
+    store.dispatch(createListCard(payload));
+  }
+
+  return response;
+}
 
 export async function getListCards(listIds) {
 
@@ -53,7 +76,6 @@ export async function editCardDesc(params) {
 }
 
 export async function moveCard(moveArgs) {
-  debugger;
   store.dispatch(moveCardForward(moveArgs));
 
   const response = await cardApi.moveCard({
