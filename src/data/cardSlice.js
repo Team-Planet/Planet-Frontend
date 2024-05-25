@@ -48,6 +48,10 @@ export const cardSlice = createSlice({
         );
       }
     },
+    createListCard(state, action) {
+      state.listCards.push(action.payload);
+      state.listCards.sort((a, b) => a.order - b.order);
+    }
   },
 });
 
@@ -58,5 +62,6 @@ export const {
   moveCardForward,
   moveCardBackward,
   changeLabel,
+  createListCard
 } = cardSlice.actions;
 export default cardSlice.reducer;
