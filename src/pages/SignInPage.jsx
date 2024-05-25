@@ -12,6 +12,7 @@ import {
 import { Link as RouterLink, Navigate } from "react-router-dom";
 import { signIn } from "../services/userService";
 import ButtonLoading from "../components/ButtonLoading";
+import planetLogo from "../assets/planet.svg";
 
 export default function SignInPage() {
   const [email, setEmail] = useState("");
@@ -21,7 +22,7 @@ export default function SignInPage() {
   const [validationMessages, setValidationMessages] = useState([]);
 
   async function handleSignIn(event) {
-    if(isLoading) return;
+    if (isLoading) return;
 
     event.preventDefault();
     setIsLoading(true);
@@ -35,10 +36,11 @@ export default function SignInPage() {
     <form onSubmit={handleSignIn}>
       <Grid container style={containerStyle}>
         <Grid item xs={12} sm={8} md={4} lg={3}>
-          <Box>
-            <Typography variant="h2" align="center">
+          <Box sx={boxStyle}>
+            <Typography variant="h2" align="center" sx={titleStyle}>
               Planet
             </Typography>
+            <img src={planetLogo} alt="" width={150} height="auto" />
             <FormGroup>
               <TextField
                 fullWidth
@@ -73,7 +75,9 @@ export default function SignInPage() {
                 }
               />
             </FormGroup>
-            <RouterLink to="/SignUp">Üye değil misin? Kayıt ol</RouterLink>
+            <Link component={RouterLink} to="/SignUp" sx={linkStyle}>
+              Üye değil misin? Kayıt ol
+            </Link>
             <ButtonLoading
               containerSx={{ marginLeft: "auto", width: "fit-content" }}
               type="submit"
@@ -94,4 +98,28 @@ const containerStyle = {
   alignItems: "center",
   height: "100vh",
   padding: "1rem",
+  backgroundSize: "cover",
+};
+
+const boxStyle = {
+  backgroundColor: "rgba(255, 255, 255, 0.85)",
+  padding: "2rem",
+  borderRadius: "8px",
+  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+};
+
+const titleStyle = {
+  color: "#333",
+  marginBottom: "1rem",
+};
+
+const linkStyle = {
+  display: "block",
+  textAlign: "left",
+  marginTop: "1rem",
+  color: "#1976d2",
+  textDecoration: "none",
+  "&:hover": {
+    textDecoration: "underline",
+  },
 };
