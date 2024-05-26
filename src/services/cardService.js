@@ -45,7 +45,6 @@ export async function getListCards(listIds) {
 
 export async function getCardInfo(id) {
   const response = await cardApi.getCardInfo(id);
-
   if (response.isSuccess) {
     store.dispatch(setCurrentCard(response.body));
   }
