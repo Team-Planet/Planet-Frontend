@@ -7,9 +7,7 @@ import {
   TextField,
   Button,
 } from "@mui/material";
-import { getCardInfo, editCardTitle, editCardDesc } from "../services/cardService";
 import { useSelector } from "react-redux";
-import LabelSelector from "./LabelSelector";
 import {
   Avatar,
   AvatarGroup,
@@ -27,13 +25,11 @@ import {
   editCardTitle,
   editCardDesc,
 } from "../services/cardService";
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs, { Dayjs } from "dayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import "../styles/CardModal.css";
+//import "../styles/CardModal.css";
 export default function CardModal({
   cardId,
   listName,
@@ -183,7 +179,7 @@ export default function CardModal({
           </Grid>
           <br />
           <InputAdornment position="start" className="desc-icon">
-            <DescriptionIcons />
+            <DescriptionIcon />
             <Typography className="desc-icon-text">Açıklama</Typography>
           </InputAdornment>
           <Grid>
