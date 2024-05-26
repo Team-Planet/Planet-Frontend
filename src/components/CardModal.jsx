@@ -29,7 +29,7 @@ import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs, { Dayjs } from "dayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-//import "../styles/CardModal.css";
+import "../styles/CardModal.css";
 export default function CardModal({
   cardId,
   listName,
