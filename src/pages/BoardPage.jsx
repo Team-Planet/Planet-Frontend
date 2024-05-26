@@ -140,22 +140,20 @@ export default function BoardPage() {
             >
               {(provided) => (
                 <BoardList list={list} provided={provided}>
-                  {listCards
-                    ?.filter((c) => c.listId === list.id)
-                    .map((card, index) => (
-                      <Draggable
-                        key={card.id.toString()}
-                        draggableId={card.id.toString()}
-                        index={index}
-                      >
-                        {(provided) => (
-                          <ListCard
-                            card={card}
-                            provided={provided}
-                            onClick={(e) => {
-                              setListName(list.title);
-                              setCardId(card.id);
-                              fetchDataForCard(card.id);
+                  {list.cards?.map((card, index) => (
+                    <Draggable
+                      key={card.id.toString()}
+                      draggableId={card.id.toString()}
+                      index={index}
+                    >
+                      {(provided) => (
+                        <ListCard
+                          card={card}
+                          provided={provided}
+                          onClick={(e) => {
+                            setListName(list.title);
+                            setCardId(card.id);
+                            fetchDataForCard(card.id);
                           }}
                           />
                         )}
