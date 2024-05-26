@@ -114,7 +114,7 @@ export default function BoardPage() {
     setStateOfCard(false);
   };
 
-  async function fetchDataForCard(cardId){
+  async function fetchDataForCard(cardId) {
     const response = await getCardInfo(cardId);
     setResponseCard(response);
     setStateOfCard(true);
@@ -124,10 +124,10 @@ export default function BoardPage() {
       {
         <CardModal
           cardId={cardId}
-          listName = {listName}
+          listName={listName}
           state={stateOfCard}
           handleClose={handleCardClose}
-          cardResponse = {responseCard}
+          cardResponse={responseCard}
         />
       }
       <MemberList members={members} />
@@ -140,21 +140,23 @@ export default function BoardPage() {
             >
               {(provided) => (
                 <BoardList list={list} provided={provided}>
-                  {list.cards?.map((card, index) => (
-                    <Draggable
-                      key={card.id.toString()}
-                      draggableId={card.id.toString()}
-                      index={index}
-                    >
-                      {(provided) => (
-                        <ListCard
-                          card={card}
-                          provided={provided}
-                          onClick={(e) => {
-                            setListName(list.title);
-                            setCardId(card.id);
-                            fetchDataForCard(card.id);
-                          }}
+                  {listCards
+                    ?.filter((c) => c.listId === list.id)
+                    .map((card, index) => (
+                      <Draggable
+                        key={card.id.toString()}
+                        draggableId={card.id.toString()}
+                        index={index}
+                      >
+                        {(provided) => (
+                          <ListCard
+                            card={card}
+                            provided={provided}
+                            onClick={(e) => {
+                              setListName(list.title);
+                              setCardId(card.id);
+                              fetchDataForCard(card.id);
+                            }}
                           />
                         )}
                       </Draggable>
