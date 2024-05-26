@@ -18,6 +18,8 @@ export default function BoardPage() {
   const [members, setMembers] = useState([]);
   const [stateOfCard, setStateOfCard] = useState(false);
   const [cardId, setCardId] = useState("");
+  const [responseCard, setResponseCard] = useState({});
+  const [listName, setListName] = useState("");
   async function fetchData() {
     const response = await getCurrentBoard(id);
     await getListCards(response.body.lists.map((l) => l.id));
@@ -111,13 +113,21 @@ export default function BoardPage() {
   const handleCardClose = () => {
     setStateOfCard(false);
   };
+
+  async function fetchDataForCard(cardId){
+    const response = await getCardInfo(cardId);
+    setResponseCard(response);
+    setStateOfCard(true);
+  }
   return (
     <>
       {
         <CardModal
           cardId={cardId}
+          listName = {listName}
           state={stateOfCard}
           handleClose={handleCardClose}
+          cardResponse = {responseCard}
         />
       }
       <MemberList members={members} />
@@ -143,9 +153,10 @@ export default function BoardPage() {
                             card={card}
                             provided={provided}
                             onClick={(e) => {
-                              setStateOfCard(true);
+                              setListName(list.title);
                               setCardId(card.id);
-                            }}
+                              fetchDataForCard(card.id);
+                          }}
                           />
                         )}
                       </Draggable>
