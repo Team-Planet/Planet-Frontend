@@ -122,3 +122,7 @@ export async function removeLabelFromCard(cardId, boardLabelId) {
 
   return response;
 }
+
+export async function handleCardMovedEvent(notification) {
+  store.dispatch(moveCardForward({newListId: notification.newListId, newOrder: notification.newOrder, cardId: notification.cardId}));
+}
