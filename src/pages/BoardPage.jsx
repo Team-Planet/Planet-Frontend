@@ -6,7 +6,12 @@ import { useSelector } from "react-redux";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import BoardList from "../components/BoardList";
 import ListCard from "../components/ListCard";
-import { getCardInfo, getListCards, handleCardMovedEvent, moveCard } from "../services/cardService";
+import {
+  getCardInfo,
+  getListCards,
+  handleCardMovedEvent,
+  moveCard,
+} from "../services/cardService";
 import MemberList from "../components/MemberList";
 import CardModal from "../components/CardModal";
 import * as signalR from "@microsoft/signalr";
@@ -175,7 +180,11 @@ export default function BoardPage() {
 }
 
 const connection = new signalR.HubConnectionBuilder()
-  .withUrl("https://planet-api-test.emreozgenc.com/hubs/board", {withCredentials: false})
+  .withUrl("https://planet-api-test.emreozgenc.com/hubs/board", {
+    withCredentials: false,
+    skipNegotiation: true,
+    transport: signalR.HttpTransportType.WebSockets,
+  })
   .configureLogging(signalR.LogLevel.Information)
   .build();
 
@@ -183,7 +192,7 @@ async function connectHub(boardId) {
   try {
     await connection.start();
     connection.invoke("JoinBoardGroup", boardId);
-  } catch(err) {
+  } catch (err) {
     console.error(err);
     setTimeout(() => connectHub(boardId), 5000);
   }
