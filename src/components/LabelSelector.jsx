@@ -10,7 +10,6 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import { addLabelToCard, removeLabelFromCard } from "../services/cardService";
 import { changeCardLabel } from "../data/boardSlice";
-
 function getContrastTextColor(hexcolor) {
   if (hexcolor.indexOf("#") !== -1) {
     hexcolor = hexcolor.replace("#", "");

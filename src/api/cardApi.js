@@ -13,6 +13,22 @@ const cardApi = {
     await api.post("Cards/Labels/Remove", { cardId, boardLabelId }),
   createCard: async (listId, title, order) =>
     await api.post("Cards/Create", { listId, title, order}),
+  editCheckListItem: async (params) => 
+    await api.post("Cards/CheckLists/Items/Edit", params),
+  addCheckListItem: async (params) =>
+    await api.post("Cards/CheckLists/Items/Add", params),
+  addCheckList: async (params) =>
+    await api.post("Cards/CheckLists/Add", params),
+  editCheckListTitle: async (params) =>
+    await api.post("Cards/CheckLists/Edit", params),
+  removeCheckList: async (params) =>
+    await api.post("Cards/CheckLists/Remove", params),
+  removeCheckListItem: async (params) =>
+    await api.post("Cards/CheckLists/Items/Remove", params),
+  addComment: async (params) =>
+    await api.post("Cards/Comments/Add", params),
+  editCardDate: async (params) =>
+    await api.post("Cards/EditCardDate", params)
 };
 
 export default cardApi;

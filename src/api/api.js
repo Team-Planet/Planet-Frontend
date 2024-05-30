@@ -67,7 +67,6 @@ const api = {
             return parseApiResponse(response);
         } catch (e) {
             console.error(e);
-            debugger;
             return {
                 isSuccess: false,
                 message: "Bilinmeyen bir hata oluştu!"

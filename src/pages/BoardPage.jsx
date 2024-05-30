@@ -26,6 +26,8 @@ export default function BoardPage() {
   const [cardId, setCardId] = useState("");
   const [responseCard, setResponseCard] = useState({});
   const [listName, setListName] = useState("");
+  const [cardStartDate, setCardStartDate] = useState("");
+  const [cardEndDate, setCardEndDate] = useState("");
   async function fetchData() {
     const response = await getCurrentBoard(id);
     await getListCards(response.body.lists.map((l) => l.id));
@@ -123,7 +125,8 @@ export default function BoardPage() {
 
   async function fetchDataForCard(cardId) {
     const response = await getCardInfo(cardId);
-    setResponseCard(response);
+    setCardStartDate(response.body.startDate?.split("T")[0]);
+    setCardEndDate(response.body.endDate?.split("T")[0]);
     setStateOfCard(true);
   }
   return (
@@ -134,7 +137,8 @@ export default function BoardPage() {
           listName={listName}
           state={stateOfCard}
           handleClose={handleCardClose}
-          cardResponse={responseCard}
+          startDate = {cardStartDate}
+          endDate = {cardEndDate}
         />
       }
       <MemberList members={members} />
