@@ -15,7 +15,7 @@
 }
 
 .custom-textfield .MuiOutlinedInput-root.Mui-focused fieldset {
-    border: 2px solid blue;
+    border: 2px solid rgb(41, 41, 251);
     border-radius: 40px;
 }
 
@@ -42,6 +42,7 @@
     font-size: 1.2rem;
     margin: 0.6rem;
 }
+
 .custom-richtextbox {
     background-color: #282828;
     width: 90%;
@@ -58,8 +59,49 @@
 }
 
 .custom-richtextbox .MuiOutlinedInput-root.Mui-focused fieldset {
-    border: 2px solid blue;
+    border: 2px solid rgb(41, 41, 251);
     border-radius: 8px;
+}
+
+.custom-textfield-comment.MuiOutlinedInput-root {
+    width: 125%;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    border-radius: 40px;
+    /*margin-bottom: 50px;*/
+}
+.custom-textfield-comment .MuiOutlinedInput-root.Mui-focused fieldset {
+    border: 2px solid rgb(41, 41, 251);
+    border-radius: 40px;
+}
+.custom-textfield-comment .MuiOutlinedInput-root.Mui-focused {
+    background-color: #282828;
+    border-radius: 40px;
+}
+
+.custom-textfield-comment .MuiInput-underline:before {
+    border-bottom: none;
+}
+
+.custom-textfield-comment .MuiInput-underline:hover:before {
+    border-bottom: none;
+}
+
+.custom-textfield-comment .MuiInput-underline:after {
+    border-bottom: none;
+}
+
+.custom-textfield-comment .MuiInputBase-input {
+    padding: 0;
+    color: rgb(232, 232, 232);
+    font-size: 1.2rem;
+    margin: 0.6rem;
+    margin-left: 0.4rem;
+}
+
+.custom-textfield-comment{
+    background-color: #282828;
+    border-radius: 40px;
+    width: 60%;
 }
 
 .modal {
@@ -72,6 +114,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow: auto; /* Ana sayfa içinde scroll oluşturulması için modal'e overflow ekleyin */
 }
 
 .modal-content {
@@ -79,24 +122,69 @@
     color: rgb(232, 232, 232);
     padding: 20px;
     border-radius: 8px;
-    max-height: 80%;
     width: 50%;
-    overflow: auto;
+    overflow-y: auto; /* Modal içeriğinde dikey scrollbar görünmesini sağlar */
+    max-height: calc(100% - 40px); /* Modal içeriğinin maksimum yüksekliği, modal içindeki diğer öğeleri statik bir şekilde göstermek için ayarlandı */
 }
-
-.list-name{
+.list-name {
     padding-left: 57px;
     padding-bottom: 15px;
+    padding-top: 5px;
     color: rgba(255, 255, 255, 0.397)
 }
 
-.desc-icon{
+.desc-icon {
     padding-bottom: 15px;
     padding-left: 15px;
     padding-right: 15px;
 }
 
-.desc-icon-text{
-    color:rgb(232, 232, 232);
+.desc-icon-text {
+    color: rgb(232, 232, 232);
+    padding-left: 15px;
+    font-weight: bold;
+}
+
+.css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root{
+    color:white !important;
+}
+
+.css-1jy569b-MuiFormLabel-root-MuiInputLabel-root{
+    color:white !important;
+}
+
+.css-1yq5fb3-MuiButtonBase-root-MuiIconButton-root{
+    color: white !important;
+}
+
+.avatarGroupContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    
+    padding: 10px;
+    position: relative;
+    width: fit-content;
+    margin-top: 10px;
+    margin-bottom: 30px;
+    padding-top: 15px;
+}
+
+.membersLabel {
+    position: absolute;
+    top: -10px;
+    left: 10px;
+    background: #323940;
+    padding: 0 5px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.labels{
+    cursor: pointer;
+}
+
+.checklist-icon{
+    padding-top: 25px;
     padding-left: 15px;
 }
