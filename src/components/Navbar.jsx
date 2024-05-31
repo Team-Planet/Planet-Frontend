@@ -12,14 +12,16 @@ import {
 } from "@mui/material";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import {blue, red, grey} from "@mui/material/colors"
-
+import { blue, red, grey } from "@mui/material/colors";
+import ButtonLoading from "./ButtonLoading";
 import React from "react";
 import { useSelector } from "react-redux";
+import AddIcon from "@mui/icons-material/Add";
 
 const navbarSx = {
-    bgcolor: grey[100],
+  bgcolor: grey[100],
   py: 1,
+  boxShadow: 2,
 };
 
 export default function Navbar() {
@@ -35,6 +37,15 @@ export default function Navbar() {
             </Typography>
           </Box>
           <Stack ml="auto" direction="row" alignItems="center" spacing={2}>
+            <Box>
+              <ButtonLoading
+                color="primary"
+                variant="contained"
+                size="small"
+                startIcon={<AddIcon />}
+                content="Davet Linki Oluştur"
+              />
+            </Box>
             <Box>
               <IconButton
                 size="large"
