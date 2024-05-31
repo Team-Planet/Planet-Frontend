@@ -73,9 +73,9 @@ export default function BoardList({ list, provided, children }) {
           {list.title}
         </Typography>
         <CardBox>{children}</CardBox>
-        <Box sx={{px: 1, pt: 0.5}}>
+        <Box sx={{ px: 1, pt: 0.5 }}>
           <ButtonLoading
-            containerSx={{width: "fit-content"}}
+            containerSx={{ width: "fit-content" }}
             color="primary"
             variant="contained"
             size="small"
