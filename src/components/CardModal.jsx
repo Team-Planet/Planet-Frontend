@@ -20,6 +20,8 @@ import {
   ListItemButton,
   Divider,
   ListItemAvatar,
+  IconButton,
+  Tooltip,
 } from "@mui/material";
 import { useSelector } from "react-redux";
 import SubtitlesIcon from "@mui/icons-material/Subtitles";
@@ -30,8 +32,11 @@ import LabelSelector from "./LabelSelector";
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import AddTaskIcon from "@mui/icons-material/AddTask";
 import CommentIcon from "@mui/icons-material/Comment";
+import DeleteIcon from "@mui/icons-material/Delete";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import AddCommentIcon from "@mui/icons-material/AddComment";
 import DateRangeIcon from "@mui/icons-material/DateRange";
+import MemberList from "./MemberList";
 import {
   getCardInfo,
   editCardTitle,
@@ -179,8 +184,10 @@ export default function CardModal({
   };
 
   const editDate = async (datetype, day, month, year) => {
-    const newMonth = month.toString().length === 2 ? month : "0".concat(month.toString());
-    const newDay = day.toString().length === 2 ? day : "0".concat(day.toString());
+    const newMonth =
+      month.toString().length === 2 ? month : "0".concat(month.toString());
+    const newDay =
+      day.toString().length === 2 ? day : "0".concat(day.toString());
     const newDate = `${year}-${newMonth}-${newDay}`;
     if (datetype === "start") {
       const response = await editCardDate({
@@ -403,24 +410,35 @@ export default function CardModal({
               fetchData();
             }}
           />
-          <Grid>
-            <TextField
-              className="custom-textfield"
-              variant="outlined"
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SubtitlesIcon />
-                  </InputAdornment>
-                ),
-              }}
-              //sx={{ input: styleOfTextField }}
-              size="medium"
-              onKeyDown={(e) => editElements(e, "title")}
-              onChange={(e) => setNewTitle(e.target.value)}
-              onBlur={(e) => editElements(e, "title")}
-              defaultValue={currentCard.title}
-            />
+          <Grid container alignItems="center" spacing={1}>
+            <Grid item>
+              <TextField
+                className="custom-textfield"
+                variant="outlined"
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SubtitlesIcon />
+                    </InputAdornment>
+                  ),
+                }}
+                size="medium"
+                onKeyDown={(e) => editElements(e, "title")}
+                onChange={(e) => setNewTitle(e.target.value)}
+                onBlur={(e) => editElements(e, "title")}
+                value={newTitle}
+              />
+            </Grid>
+            <Grid item>
+              <Tooltip title="Kartı Sil">
+                <IconButton
+                  //onClick={handleDelete}
+                  sx={{ color: "red", marginLeft: "350px" }}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </Tooltip>
+            </Grid>
           </Grid>
           <Grid>
             <Typography className="list-name">
@@ -445,7 +463,13 @@ export default function CardModal({
                     {initial}
                   </Avatar>
                 ))}
+                <Tooltip title="Görev Ataması Yap">
+                <IconButton sx={{ ml:2, width:'50%'  }}>
+                  <PersonAddIcon />
+                </IconButton>
+              </Tooltip>
               </AvatarGroup>
+              
               <Typography
                 variant="body2"
                 sx={{
