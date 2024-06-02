@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Navigate } from "react-router-dom";
-import { getCurrentBoard } from "../services/boardService";
+import { getCurrentBoard, addList } from "../services/boardService";
 import { Box, CircularProgress, Stack, Button } from "@mui/material";
 import ButtonLoading from "../components/ButtonLoading";
 import AddIcon from "@mui/icons-material/Add";
@@ -127,6 +127,10 @@ export default function BoardPage() {
     setStateOfCard(false);
   };
 
+  const handleAddList = () => async () => {
+    await addList(currentBoard.id);
+  };
+
   async function fetchDataForCard(cardId) {
     const response = await getCardInfo(cardId);
     setCardStartDate(response.body.startDate?.split("T")[0]);
@@ -196,6 +200,7 @@ export default function BoardPage() {
                     size="small"
                     startIcon={<AddIcon />}
                     content="Liste Ekle"
+                    onClick={handleAddList()}
                   />
                 </Box>
               </Stack>
