@@ -19,7 +19,6 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 
 export default function HomePage() {
-  const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
   const userBoards = useSelector((state) => state.board.userBoards);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageCount, setPageCount] = useState(1);

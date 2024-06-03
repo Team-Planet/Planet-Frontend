@@ -25,7 +25,6 @@ const navbarSx = {
 };
 
 export default function Navbar() {
-  const userInformation = useSelector((state) => state.user.userInformation);
 
   return (
     <Box sx={navbarSx}>

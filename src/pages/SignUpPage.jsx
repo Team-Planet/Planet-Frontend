@@ -5,6 +5,7 @@ import ButtonLoading from "../components/ButtonLoading";
 import { Navigate } from "react-router-dom";
 import Logo from "../components/Logo";
 import background from '../assets/bg_signin_signup.jpg';
+import { useAuth } from "../contexts/AuthContext";
 
 export function SignUpPage() {
   const [firstName, setFirstName] = useState("");
@@ -15,6 +16,7 @@ export function SignUpPage() {
   const [validationMessages, setValidationMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isSignedUp, setIsSignedUp] = useState(false);
+  const {isAuthenticated} = useAuth();
 
   async function handleSignUp(event) {
     if (isLoading) return;
@@ -35,6 +37,8 @@ export function SignUpPage() {
 
   return (
     <form onSubmit={handleSignUp}>
+      {isAuthenticated && <Navigate to="/" />}
+      {isSignedUp && <Navigate to="/SignIn" />}
       <Grid container style={containerStyle}>
         <Grid item xs={12} sm={8} md={4} lg={3}>
           <Box sx={boxStyle}>
@@ -143,7 +147,6 @@ export function SignUpPage() {
           </Box>
         </Grid>
       </Grid>
-      {isSignedUp && <Navigate to="/SignIn" />}
     </form>
   );
 }

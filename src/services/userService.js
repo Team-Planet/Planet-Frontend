@@ -1,5 +1,4 @@
 import { store } from "../data/store";
-import { authenticate, setUserInformation } from "../data/userSlice";
 import userApi from "../api/userApi";
 import { jwtDecode } from "jwt-decode";
 import { pushNotification } from "../data/notificationSlice";
@@ -9,10 +8,6 @@ export async function signIn(email, password) {
   if (response.isSuccess) {
     localStorage.setItem("accessToken", response.body.accessToken);
     localStorage.setItem("refreshToken", response.body.refreshToken);
-
-    const { sub, name } = jwtDecode(response.body.accessToken);
-    store.dispatch(setUserInformation({ sub, name, email }));
-    store.dispatch(authenticate());
     store.dispatch(
       pushNotification({
         severity: "success",
@@ -34,7 +29,6 @@ export async function signIn(email, password) {
 export function signOut() {
   localStorage.removeItem("accessToken");
   localStorage.removeItem("refreshToken");
-  store.dispatch(setUserInformation(null));
 }
 
 export async function signUp(
