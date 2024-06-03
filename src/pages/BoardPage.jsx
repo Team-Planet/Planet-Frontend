@@ -16,9 +16,9 @@ import {
 } from "../services/cardService";
 import MemberList from "../components/MemberList";
 import CardModal from "../components/CardModal";
-import * as signalR from "@microsoft/signalr";
 import MainLayout from "../layout/MainLayout";
 import "../styles/BoardPage.css";
+import { useSignalR } from "../contexts/SignalRContext";
 
 export default function BoardPage() {
   const { id } = useParams();
@@ -32,11 +32,12 @@ export default function BoardPage() {
   const [listName, setListName] = useState("");
   const [cardStartDate, setCardStartDate] = useState("");
   const [cardEndDate, setCardEndDate] = useState("");
+  const signalR = useSignalR();
   async function fetchData() {
     const response = await getCurrentBoard(id);
     await getListCards(response.body.lists.map((l) => l.id));
     setIsLoading(false);
-    await connectHub(id);
+    signalR.invoke("JoinBoardGroup", id);
   }
 
   async function handleOnDragEnd(result) {
@@ -106,6 +107,10 @@ export default function BoardPage() {
 
   useEffect(() => {
     fetchData();
+
+    return () => {
+      signalR.invoke("LeaveBoardGroup", id);
+    }
   }, []);
 
   if (isLoading) {
@@ -207,25 +212,3 @@ export default function BoardPage() {
   );
 }
 
-const connection = new signalR.HubConnectionBuilder()
-  .withUrl("https://planet-api-test.emreozgenc.com/hubs/board", {
-    withCredentials: false,
-    skipNegotiation: true,
-    transport: signalR.HttpTransportType.WebSockets,
-  })
-  .configureLogging(signalR.LogLevel.Information)
-  .build();
-
-async function connectHub(boardId) {
-  try {
-    await connection.start();
-    connection.invoke("JoinBoardGroup", boardId);
-  } catch (err) {
-    console.error(err);
-    setTimeout(() => connectHub(boardId), 5000);
-  }
-}
-
-connection.on("ReceiveCardMovedEvent", (notification) => {
-  handleCardMovedEvent(notification);
-});

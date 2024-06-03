@@ -12,26 +12,28 @@ import {
 import { Link as RouterLink, Navigate } from "react-router-dom";
 import { signIn } from "../services/userService";
 import ButtonLoading from "../components/ButtonLoading";
-import planetLogo from "../assets/planet.svg";
 import Logo from "../components/Logo";
 import background from "../assets/bg_signin_signup.jpg";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function SignInPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [isSignedIn, setIsSignedIn] = useState(false);
   const [validationMessages, setValidationMessages] = useState([]);
+  const { isAuthenticated, authenticate } = useAuth();
 
   async function handleSignIn(event) {
     if (isLoading) return;
-
     event.preventDefault();
     setIsLoading(true);
     const response = await signIn(email, password);
     setValidationMessages(response.validationMessages);
     setIsLoading(false);
-    setIsSignedIn(response.isSuccess);
+
+    if (response.isSuccess) {
+      authenticate();
+    }
   }
 
   return (
@@ -86,7 +88,7 @@ export default function SignInPage() {
           </Box>
         </Grid>
       </Grid>
-      {isSignedIn && <Navigate to="/" />}
+      {isAuthenticated && <Navigate to="/" />}
     </form>
   );
 }
