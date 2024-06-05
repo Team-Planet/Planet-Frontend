@@ -2,16 +2,17 @@ import React from "react";
 import { Box, Button, CircularProgress } from "@mui/material";
 
 export default function ButtonLoading(props) {
-  const { buttonSx, containerSx, loading, content, onClick, type, startIcon } = props;
+  const { buttonSx, containerSx, loading, content, onClick, type, startIcon, color, variant } = props;
   return (
     <Box sx={{...containerSx, position: "relative"}}>
       <Button
-        variant="contained"
+        variant={variant ?? "contained"}
         sx={buttonSx}
         disabled={loading}
         onClick={onClick}
         type={type}
         startIcon={startIcon}
+        color={color}
       >
         {content}
       </Button>
@@ -25,6 +26,7 @@ export default function ButtonLoading(props) {
             marginTop: "-12px",
             marginLeft: "-12px",
           }}
+          color={color}
         />
       )}
     </Box>

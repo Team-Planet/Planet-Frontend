@@ -29,6 +29,12 @@ export async function signIn(email, password) {
 export function signOut() {
   localStorage.removeItem("accessToken");
   localStorage.removeItem("refreshToken");
+
+  store.dispatch(pushNotification({
+    severity: "success",
+    duration: 5000,
+    content: "Başarılı bir şekilde çıkış yaptınız."
+  }));
 }
 
 export async function signUp(
