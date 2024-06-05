@@ -24,7 +24,7 @@ export default function ListCard({ provided, card, onClick }) {
       <Box sx={{ marginBottom: 0.8 }}>
         <Box
           elevation={0}
-          sx={{ padding: 1, backgroundColor: "#f1faee", borderRadius: 2 }}
+          sx={{ padding: 1, bgcolor: "paper.main", borderRadius: 2 }}
         >
           <Stack
             direction="row"
@@ -39,7 +39,7 @@ export default function ListCard({ provided, card, onClick }) {
                 p={0.4}
                 style={{ borderRadius: "5px" }}
                 key={index}
-                sx={{ backgroundColor: `${label.colorCode}` }}
+                sx={{ bgcolor: `${label.colorCode}` }}
               >
                 <Typography
                   fontSize={12}
@@ -52,7 +52,7 @@ export default function ListCard({ provided, card, onClick }) {
             ))}
           </Stack>
           <Box>
-            <Typography>{card.title}</Typography>
+            <Typography color="accent.main">{card.title}</Typography>
           </Box>
         </Box>
       </Box>

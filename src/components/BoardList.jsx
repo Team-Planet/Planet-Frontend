@@ -18,10 +18,12 @@ import { createCard } from "../services/cardService";
 const BoardListPaper = (props) => (
   <Paper
     sx={{
-      backgroundColor: "#2b2d42",
-      padding: 1,
-      width: 280,
+      background: "rgba(255, 255, 255, 0.12)",
+      boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+      // backdropFilter: "blur(2px)",
       borderRadius: 1.5,
+      width: 280,
+      padding: 0.7
     }}
   >
     {props.children}
@@ -38,13 +40,13 @@ const CardBox = (props) => (
       overflowY: "auto",
       overflowX: "hidden",
       "&::-webkit-scrollbar": {
-        width: 5,
+        width: 2,
       },
       "&::-webkit-scrollbar-track": {
-        backgroundColor: "transparent",
+        bgcolor: "transparent",
       },
       "&::-webkit-scrollbar-thumb": {
-        backgroundColor: "#8d99ae",
+        bgcolor: "gold.main",
         borderRadius: 2,
       },
     }}
@@ -67,8 +69,8 @@ export default function BoardList({ list, provided, children }) {
       <BoardListPaper elevation={10} sx={{ padding: 0.3, width: 250 }}>
         <Typography
           fontWeight={500}
-          textAlign="center"
-          color="#edf2f4"
+          textAlign="right"
+          color="gold.main"
           sx={{ px: 1, py: 0.5 }}
         >
           {list.title}
@@ -77,8 +79,9 @@ export default function BoardList({ list, provided, children }) {
         <Box sx={{ px: 1, pt: 0.5 }}>
           <ButtonLoading
             containerSx={{ width: "fit-content" }}
-            color="primary"
-            variant="contained"
+            buttonSx={{py: 0.2}}
+            color="turqoise"
+            variant="text"
             size="small"
             startIcon={<AddIcon />}
             content="Kart Oluştur"
