@@ -207,7 +207,7 @@ export default function BoardPage() {
                   <Box>
                     <ButtonLoading
                       containerSx={{ width: "fit-content" }}
-                      buttonSx={{minWidth: 170}}
+                      buttonSx={{ minWidth: 170 }}
                       color="turqoise"
                       variant="outlined"
                       size="small"

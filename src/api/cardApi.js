@@ -1,3 +1,4 @@
+import { deleteCard } from "../services/cardService";
 import api from "./api";
 
 const cardApi = {
@@ -12,8 +13,8 @@ const cardApi = {
   removeLabelFromCard: async (cardId, boardLabelId) =>
     await api.post("Cards/Labels/Remove", { cardId, boardLabelId }),
   createCard: async (listId, title, order) =>
-    await api.post("Cards/Create", { listId, title, order}),
-  editCheckListItem: async (params) => 
+    await api.post("Cards/Create", { listId, title, order }),
+  editCheckListItem: async (params) =>
     await api.post("Cards/CheckLists/Items/Edit", params),
   addCheckListItem: async (params) =>
     await api.post("Cards/CheckLists/Items/Add", params),
@@ -25,10 +26,9 @@ const cardApi = {
     await api.post("Cards/CheckLists/Remove", params),
   removeCheckListItem: async (params) =>
     await api.post("Cards/CheckLists/Items/Remove", params),
-  addComment: async (params) =>
-    await api.post("Cards/Comments/Add", params),
-  editCardDate: async (params) =>
-    await api.post("Cards/EditCardDate", params)
+  addComment: async (params) => await api.post("Cards/Comments/Add", params),
+  editCardDate: async (params) => await api.post("Cards/EditCardDate", params),
+  deleteCard: async (id) => await api.post("Cards/RemoveCard", { id }),
 };
 
 export default cardApi;

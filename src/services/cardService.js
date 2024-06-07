@@ -235,5 +235,19 @@ export async function editCardDate(params) {
 }
 
 export async function handleCardMovedEvent(notification) {
-  store.dispatch(moveCardForward({newListId: notification.newListId, newOrder: notification.newOrder, cardId: notification.cardId}));
+  store.dispatch(
+    moveCardForward({
+      newListId: notification.newListId,
+      newOrder: notification.newOrder,
+      cardId: notification.cardId,
+    })
+  );
+}
+
+export async function deleteCard(cardId) {
+  const response = await cardApi.deleteCard(cardId);
+  if (response.isSuccess) {
+    console.log("başarılı");
+  }
+  return response;
 }
