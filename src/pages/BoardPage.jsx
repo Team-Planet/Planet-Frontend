@@ -117,7 +117,7 @@ export default function BoardPage() {
     setStateOfCard(false);
   };
 
-  const handleAddList = () => async () => {
+  const handleAddList = async () => {
     await addList(currentBoard.id);
   };
 
@@ -212,6 +212,7 @@ export default function BoardPage() {
                     <ButtonLoading
                       containerSx={{ width: "fit-content" }}
                       buttonSx={{minWidth: 170}}
+                      onClick={handleAddList}
                       color="turqoise"
                       variant="outlined"
                       size="small"
