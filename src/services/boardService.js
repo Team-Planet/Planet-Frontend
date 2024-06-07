@@ -1,5 +1,9 @@
 import boardApi from "../api/boardApi";
-import { setCurrentBoard, setUserBoards } from "../data/boardSlice";
+import {
+  setCurrentBoard,
+  setUserBoards,
+  createBoardList,
+} from "../data/boardSlice";
 import { store } from "../data/store";
 
 export async function getUserBoards(params) {
@@ -19,6 +23,23 @@ export async function getCurrentBoard(id) {
 
   if (response.isSuccess) {
     store.dispatch(setCurrentBoard(response.body));
+  }
+
+  return response;
+}
+
+export async function addList(boardId) {
+  //tekrar bakılacak
+  const order = 20;
+  const response = await boardApi.createBoardList("Yeni Liste", boardId, order);
+  if (response.isSuccess) {
+    const payload = {
+      id: response.body.listId,
+      title: "Yeni Liste",
+      boardId: boardId,
+      order: order,
+    };
+    store.dispatch(createBoardList(payload));
   }
 
   return response;
