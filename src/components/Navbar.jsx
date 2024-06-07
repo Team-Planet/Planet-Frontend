@@ -9,59 +9,78 @@ import {
   IconButton,
   Avatar,
   Badge,
+  Menu,
+  MenuItem,
 } from "@mui/material";
-import MailIcon from "@mui/icons-material/Mail";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import { blue, red, grey } from "@mui/material/colors";
-import ButtonLoading from "./ButtonLoading";
-import React from "react";
-import { useSelector } from "react-redux";
-import AddIcon from "@mui/icons-material/Add";
-
-const navbarSx = {
-  bgcolor: grey[100],
-  py: 1,
-  boxShadow: 2,
-};
+import React, { useState } from "react";
+import LogoutIcon from '@mui/icons-material/Logout';
+import { signOut } from "../services/userService";
+import { useAuth } from "../contexts/AuthContext";
+import { redirect } from "react-router-dom";
+import Logo from "./Logo";
 
 export default function Navbar() {
-  const userInformation = useSelector((state) => state.user.userInformation);
+  const {revoke, user} = useAuth();
+  const [anchorElUser, setAnchorElUser] = useState(null);
+  function handleOpenUserMenu(event) {
+    setAnchorElUser(event.currentTarget);
+  }
+
+  function handleCloseUserMenu() {
+    setAnchorElUser(null);
+  }
+
+  function handleSignOut() {
+    revoke();
+    signOut();
+    redirect("/SignIn");
+  }
+
+  const navbarSx = {
+    height: "100%",
+    display: "flex",
+    alignItems: "center"
+  }
+
 
   return (
     <Box sx={navbarSx}>
-      <Container maxWidth="xl">
+      <Container maxWidth="lg">
         <Stack direction="row" alignItems="center">
           <Box marginRight={10}>
-            <Typography variant="h3" fontSize={30}>
-              Planet
-            </Typography>
+            <Logo size={35} color="gold.main" />
           </Box>
           <Stack ml="auto" direction="row" alignItems="center" spacing={2}>
             <Box>
-              <ButtonLoading
-                color="primary"
-                variant="contained"
-                size="small"
-                startIcon={<AddIcon />}
-                content="Davet Linki Oluştur"
-              />
-            </Box>
-            <Box>
-              <IconButton
-                size="large"
-                aria-label="show 4 new mails"
-                color="inherit"
+              <Tooltip title={user.name}>
+                <IconButton onClick={handleOpenUserMenu}>
+                  <Avatar />
+                </IconButton>
+              </Tooltip>
+              <Menu
+                sx={{ mt: "45px" }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
               >
-                <Badge badgeContent={3} color="error">
-                  <NotificationsIcon sx={{ fontSize: 30 }} />
-                </Badge>
-              </IconButton>
+                <MenuItem key="test" onClick={handleSignOut}>
+                  <Stack alignItems="center" direction="row" gap={1}>
+                    <LogoutIcon />
+                    <Typography>Çıkış Yap</Typography>
+                  </Stack>
+                </MenuItem>
+              </Menu>
             </Box>
-            <Tooltip title="Emre Özgenç">
-              <IconButton>
-                <Avatar />
-              </IconButton>
-            </Tooltip>
           </Stack>
         </Stack>
       </Container>

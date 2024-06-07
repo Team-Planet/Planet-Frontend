@@ -17,12 +17,13 @@ import MainLayout from "../layout/MainLayout";
 import MainPaper from "../components/MainPaper";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
+import { useAuth } from "../contexts/AuthContext";
 
 export default function HomePage() {
-  const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
   const userBoards = useSelector((state) => state.board.userBoards);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageCount, setPageCount] = useState(1);
+  const {user} = useAuth();
 
   async function fetchData() {
     const response = await getUserBoards({
@@ -68,8 +69,8 @@ export default function HomePage() {
             <Box display="flex" justifyContent="center">
               <Avatar sx={{width: 150, height: 150}} />
             </Box>
-            <Typography marginTop={1} fontSize={20} fontWeight={500} align="center">Emre Özgenç</Typography>
-            <Typography marginTop={0.5} fontSize={14} fontWeight={300} align="center">emreozgenc@hotmail.com.tr</Typography>
+            <Typography marginTop={1} fontSize={20} fontWeight={500} align="center">{user.name}</Typography>
+            <Typography marginTop={0.5} fontSize={14} fontWeight={300} align="center">{user.email}</Typography>
           </MainPaper>
         </Grid>
       </Grid>

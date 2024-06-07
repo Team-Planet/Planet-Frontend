@@ -1,12 +1,16 @@
 import React from "react";
-import { useSelector } from "react-redux";
 import Navbar from "./Navbar";
+import { Box } from "@mui/material";
+
+const headerStyling = {
+  height: "15vh",
+  bgcolor: "transparent"
+}
 
 export default function MainLayoutHeader() {
-  const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
   return (
-    <>
+    <Box sx={headerStyling}>
       <Navbar />
-    </>
+    </Box>
   );
 }

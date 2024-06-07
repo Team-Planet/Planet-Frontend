@@ -1,10 +1,12 @@
-import { Container } from '@mui/material'
-import React from 'react'
+import { Box } from "@mui/material";
+import React from "react";
+
+const contentStyling = {
+  height: "80vh"
+};
 
 export default function MainLayoutContent(props) {
-  return (
-    <Container maxWidth="xl" sx={{py: 10}}>
-        {props.children}
-    </Container>
-  )
+  return <Box sx={contentStyling}>
+    {props.children}
+  </Box>;
 }

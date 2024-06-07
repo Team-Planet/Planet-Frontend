@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Navigate } from "react-router-dom";
 import { getCurrentBoard, addList } from "../services/boardService";
-import { Box, CircularProgress, Stack, Button } from "@mui/material";
+import { Box, CircularProgress, Stack, Button, Container } from "@mui/material";
 import ButtonLoading from "../components/ButtonLoading";
 import AddIcon from "@mui/icons-material/Add";
 import { useSelector } from "react-redux";
@@ -16,9 +16,9 @@ import {
 } from "../services/cardService";
 import MemberList from "../components/MemberList";
 import CardModal from "../components/CardModal";
-import * as signalR from "@microsoft/signalr";
 import MainLayout from "../layout/MainLayout";
 import "../styles/BoardPage.css";
+import { useSignalR } from "../contexts/SignalRContext";
 
 export default function BoardPage() {
   const { id } = useParams();
@@ -32,11 +32,12 @@ export default function BoardPage() {
   const [listName, setListName] = useState("");
   const [cardStartDate, setCardStartDate] = useState("");
   const [cardEndDate, setCardEndDate] = useState("");
+  const signalR = useSignalR();
   async function fetchData() {
     const response = await getCurrentBoard(id);
     await getListCards(response.body.lists.map((l) => l.id));
     setIsLoading(false);
-    await connectHub(id);
+    signalR.invoke("JoinBoardGroup", id);
   }
 
   async function handleOnDragEnd(result) {
@@ -106,22 +107,11 @@ export default function BoardPage() {
 
   useEffect(() => {
     fetchData();
-  }, []);
 
-  if (isLoading) {
-    return (
-      <Box
-        sx={{
-          minHeight: "100vh",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <CircularProgress />
-      </Box>
-    );
-  }
+    return () => {
+      signalR.invoke("LeaveBoardGroup", id);
+    };
+  }, []);
 
   const handleCardClose = () => {
     setStateOfCard(false);
@@ -138,13 +128,38 @@ export default function BoardPage() {
     setStateOfCard(true);
   }
   return (
-    <div className="board-page-container">
-      <MainLayout>
-        <Box sx={{ display: "flex" }}>
-          <Box>
-            <MemberList />
-          </Box>
-          <Box sx={{ flexGrow: 1 }}>
+    <MainLayout>
+      {isLoading ? (
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+          }}
+        >
+          <CircularProgress color="gold" />
+        </Box>
+      ) : (
+        <Container maxWidth="xl">
+          <Box
+            sx={{
+              display: "flex",
+              overflowX: "auto",
+              overflowY: "hidden",
+              p: 5,
+              "&::-webkit-scrollbar": {
+                height: 5,
+              },
+              "&::-webkit-scrollbar-track": {
+                bgcolor: "rgba(255, 255, 255, 0.1)",
+              },
+              "&::-webkit-scrollbar-thumb": {
+                bgcolor: "gold.main",
+                borderRadius: 2,
+              },
+            }}
+          >
             <CardModal
               cardId={cardId}
               listName={listName}
@@ -152,85 +167,64 @@ export default function BoardPage() {
               handleClose={handleCardClose}
               cardResponse={responseCard}
             />
-            <DragDropContext onDragEnd={handleOnDragEnd}>
-              <Stack
-                direction="row"
-                spacing={3}
-                justifyContent="center"
-                style={{ margin: "0 auto" }}
-              >
-                {currentBoard?.lists?.map((list) => (
-                  <Droppable
-                    key={list.id.toString()}
-                    droppableId={list.id.toString()}
-                  >
-                    {(provided) => (
-                      <BoardList list={list} provided={provided}>
-                        {listCards
-                          ?.filter((c) => c.listId === list.id)
-                          .map((card, index) => (
-                            <Draggable
-                              key={card.id.toString()}
-                              draggableId={card.id.toString()}
-                              index={index}
-                            >
-                              {(provided) => (
-                                <ListCard
-                                  card={card}
-                                  provided={provided}
-                                  onClick={(e) => {
-                                    setListName(list.title);
-                                    setCardId(card.id);
-                                    fetchDataForCard(card.id);
-                                  }}
-                                />
-                              )}
-                            </Draggable>
-                          ))}
-                        {provided.placeholder}
-                      </BoardList>
-                    )}
-                  </Droppable>
-                ))}
-                <Box>
-                  <ButtonLoading
-                    containerSx={{ width: "fit-content" }}
-                    color="primary"
-                    variant="contained"
-                    size="small"
-                    startIcon={<AddIcon />}
-                    content="Liste Ekle"
-                    onClick={handleAddList()}
-                  />
-                </Box>
-              </Stack>
-            </DragDropContext>
+            <Box sx={{ flexGrow: 1 }}>
+              <DragDropContext onDragEnd={handleOnDragEnd}>
+                <Stack
+                  direction="row"
+                  spacing={3}
+                  justifyContent="center"
+                  style={{ margin: "0 auto" }}
+                >
+                  {currentBoard?.lists?.map((list) => (
+                    <Droppable
+                      key={list.id.toString()}
+                      droppableId={list.id.toString()}
+                    >
+                      {(provided) => (
+                        <BoardList list={list} provided={provided}>
+                          {listCards
+                            ?.filter((c) => c.listId === list.id)
+                            .map((card, index) => (
+                              <Draggable
+                                key={card.id.toString()}
+                                draggableId={card.id.toString()}
+                                index={index}
+                              >
+                                {(provided) => (
+                                  <ListCard
+                                    card={card}
+                                    provided={provided}
+                                    onClick={(e) => {
+                                      setListName(list.title);
+                                      setCardId(card.id);
+                                      fetchDataForCard(card.id);
+                                    }}
+                                  />
+                                )}
+                              </Draggable>
+                            ))}
+                          {provided.placeholder}
+                        </BoardList>
+                      )}
+                    </Droppable>
+                  ))}
+                  <Box>
+                    <ButtonLoading
+                      containerSx={{ width: "fit-content" }}
+                      buttonSx={{minWidth: 170}}
+                      color="turqoise"
+                      variant="outlined"
+                      size="small"
+                      startIcon={<AddIcon />}
+                      content="LİSTE OLUŞTUR"
+                    />
+                  </Box>
+                </Stack>
+              </DragDropContext>
+            </Box>
           </Box>
-        </Box>
-      </MainLayout>
-    </div>
+        </Container>
+      )}
+    </MainLayout>
   );
 }
-
-const connection = new signalR.HubConnectionBuilder()
-  .withUrl("https://planet-api-test.emreozgenc.com/hubs/board", {
-    withCredentials: false,
-    skipNegotiation: true,
-    transport: signalR.HttpTransportType.WebSockets,
-  })
-  .configureLogging(signalR.LogLevel.Information)
-  .build();
-
-async function connectHub(boardId) {
-  try {
-    await connection.start();
-    connection.invoke("JoinBoardGroup", boardId);
-  } catch (err) {
-    console.error(err);
-    setTimeout(() => connectHub(boardId), 5000);
-  }
-}
-
-connection.on("ReceiveCardMovedEvent", (notification) => {
-  handleCardMovedEvent(notification);
-});
