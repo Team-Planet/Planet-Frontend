@@ -13,24 +13,7 @@ import { createTheme } from "@mui/material";
 
 const theme = createTheme({
   palette: {
-    dark: {
-      main: "#003049",
-    },
-    red: {
-      main: "#d62828",
-    },
-    orange: {
-      main: "#F77F00",
-    },
-    yellow: {
-      main: "#fcbf49",
-    },
-    vanilla: {
-      main: "#eae2b7",
-    },
-    blue: {
-      main: "#0A1828",
-    },
+    mode: "dark",
     turqoise: {
       main: "#30d5c8",
     },

@@ -11,10 +11,10 @@ import { store } from "../data/store";
 
 export async function createCard(listId) {
   const order =
-    store
+    (store
       .getState()
       .card.listCards.filter((c) => c.listId === listId)
-      .reverse()[0].order + 1024;
+      .reverse()[0]?.order ?? 0) + 1024;
   const response = await cardApi.createCard(
     listId,
     "Yeni oluşturulmuş kart",

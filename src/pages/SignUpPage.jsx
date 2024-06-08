@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Grid, Typography, FormGroup, TextField, Box } from "@mui/material";
+import { Grid, Typography, FormGroup, TextField, Box, Paper } from "@mui/material";
 import { signUp } from "../services/userService";
 import ButtonLoading from "../components/ButtonLoading";
 import { Navigate } from "react-router-dom";
@@ -41,15 +41,16 @@ export function SignUpPage() {
       {isSignedUp && <Navigate to="/SignIn" />}
       <Grid container style={containerStyle}>
         <Grid item xs={12} sm={8} md={4} lg={3}>
-          <Box sx={boxStyle}>
-            <Logo />
+          <Paper sx={{p:5}}>
+            <Logo color="gold.main" />
             <FormGroup>
               <TextField
                 onChange={(e) => {
                   setFirstName(e.target.value);
                 }}
                 fullWidth
-                variant="outlined"
+                variant="filled"
+                color="gold"
                 label="Ad"
                 type="firstName"
                 margin="dense"
@@ -68,7 +69,8 @@ export function SignUpPage() {
                   setLastName(e.target.value);
                 }}
                 fullWidth
-                variant="outlined"
+                variant="filled"
+                color="gold"
                 label="Soyad"
                 type="lastName"
                 margin="dense"
@@ -87,7 +89,8 @@ export function SignUpPage() {
                   setEmail(e.target.value);
                 }}
                 fullWidth
-                variant="outlined"
+                variant="filled"
+                color="gold"
                 label="E-Posta adresi"
                 type="email"
                 margin="dense"
@@ -106,7 +109,8 @@ export function SignUpPage() {
                   setPassword(e.target.value);
                 }}
                 fullWidth
-                variant="outlined"
+                variant="filled"
+                color="gold"
                 label="Şifre"
                 type="password"
                 margin="dense"
@@ -125,7 +129,8 @@ export function SignUpPage() {
                   setConfirmPassword(e.target.value);
                 }}
                 fullWidth
-                variant="outlined"
+                variant="filled"
+                color="gold"
                 label="Şifre Onay"
                 type="password"
                 margin="dense"
@@ -141,10 +146,12 @@ export function SignUpPage() {
             <ButtonLoading
               containerSx={{ marginTop: 2, ml: "auto", width: "fit-content" }}
               type="submit"
+              variant="outlined"
               content="KAYIT OL"
+              color="gold"
               loading={isLoading}
             />
-          </Box>
+          </Paper>
         </Grid>
       </Grid>
     </form>
@@ -159,8 +166,8 @@ const containerStyle = {
   alignItems: "center",
   height: "100vh",
   padding: "1rem",
-  background: `url(${background})`,
-  backgroundSize: "100% auto",
+  background: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(${background})`,
+  backgroundSize: "cover",
   backgroundPosition: "center bottom"
 };
 

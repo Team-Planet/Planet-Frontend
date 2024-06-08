@@ -8,6 +8,7 @@ import {
   FormGroup,
   Typography,
   CircularProgress,
+  Paper,
 } from "@mui/material";
 import { Link as RouterLink, Navigate } from "react-router-dom";
 import { signIn } from "../services/userService";
@@ -38,17 +39,18 @@ export default function SignInPage() {
 
   return (
     <form onSubmit={handleSignIn}>
-      <Grid container style={containerStyle}>
+      <Grid container sx={containerStyle}>
         <Grid item xs={12} sm={8} md={4} lg={3}>
-          <Box sx={boxStyle}>
-            <Logo />
+          <Paper elevation={1} sx={{p: 6, borderRadius: 3}}>
+            <Logo color="gold.main" />
             <FormGroup>
               <TextField
                 fullWidth
-                variant="outlined"
+                variant="filled"
                 label="E-Posta adresi"
                 type="email"
                 margin="dense"
+                color="gold"
                 onChange={(e) => setEmail(e.target.value)}
                 error={validationMessages.some((m) =>
                   m.code.startsWith("Email")
@@ -62,10 +64,11 @@ export default function SignInPage() {
             <FormGroup sx={{ marginBottom: 1 }}>
               <TextField
                 fullWidth
-                variant="outlined"
+                variant="filled"
                 label="Şifre"
                 type="password"
                 margin="dense"
+                color="gold"
                 onChange={(e) => setPassword(e.target.value)}
                 error={validationMessages.some((m) =>
                   m.code.startsWith("Password")
@@ -83,9 +86,11 @@ export default function SignInPage() {
               containerSx={{ marginLeft: "auto", width: "fit-content" }}
               type="submit"
               content="GİRİŞ YAP"
+              variant="outlined"
+              color="gold"
               loading={isLoading}
             />
-          </Box>
+          </Paper>
         </Grid>
       </Grid>
       {isAuthenticated && <Navigate to="/" />}
@@ -99,7 +104,7 @@ const containerStyle = {
   alignItems: "center",
   height: "100vh",
   padding: "1rem",
-  background: `url(${background})`,
+  background: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(${background})`,
   backgroundSize: "cover",
   backgroundPosition: "center bottom",
 };
@@ -120,7 +125,8 @@ const linkStyle = {
   display: "block",
   textAlign: "left",
   marginTop: "1rem",
-  color: "#1976d2",
+  fontWeight: 500,
+  color: "gold.main",
   textDecoration: "none",
   "&:hover": {
     textDecoration: "underline",
