@@ -4,9 +4,10 @@ import {
   setUserBoards,
   createBoardList,
 } from "../data/boardSlice";
+import { pushNotification } from "../data/notificationSlice";
 import { store } from "../data/store";
 
-export async function getUserBoards(params) {
+export async function getUserBoards(params = {pageSize: 8, currentPage: 1}) {
   const response = await boardApi.getUserBoards(params);
 
   if (!response.isSuccess) {
@@ -40,6 +41,30 @@ export async function addList(boardId) {
       order: order,
     };
     store.dispatch(createBoardList(payload));
+  }
+
+  return response;
+}
+
+export async function createBoard(title, description) {
+  const response = await boardApi.createBoard(title, description);
+
+  if (response.isSuccess) {
+    store.dispatch(
+      pushNotification({
+        severity: "success",
+        content: response.message,
+        duration: 3000,
+      })
+    );
+  } else {
+    store.dispatch(
+      pushNotification({
+        severity: "error",
+        content: response.message,
+        duration: 3000,
+      })
+    );
   }
 
   return response;

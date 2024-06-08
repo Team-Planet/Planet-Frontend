@@ -2,6 +2,7 @@ import { store } from "../data/store";
 import userApi from "../api/userApi";
 import { jwtDecode } from "jwt-decode";
 import { pushNotification } from "../data/notificationSlice";
+import { setStatistics } from "../data/userSlice";
 export async function signIn(email, password) {
   const response = await userApi.signIn(email, password);
 
@@ -63,4 +64,13 @@ export async function signUp(
   }
 
   return response;
+}
+
+
+export async function getStatistics() {
+  const response =  await userApi.getStatistics();
+  
+  if(response.isSuccess) {
+    store.dispatch(setStatistics(response.body));
+  }
 }
