@@ -1,4 +1,5 @@
 import cardApi from "../api/cardApi";
+import { pushNotification } from "../data/notificationSlice";
 import {
   setCurrentCard,
   setListCards,
@@ -70,8 +71,22 @@ export async function editCardTitle(params) {
     title: params.title,
   });
   if (response.isSuccess) {
-    console.log("başarılı");
-    //board page güncelleme işlemini yap
+    store.dispatch(
+      pushNotification({
+        content: response.message,
+        duration: 5000,
+        severity: "success",
+      })
+    );
+  }
+  else {
+    store.dispatch(
+      pushNotification({
+        severity: "error",
+        content: response.message,
+        duration: 3000,
+      })
+    );
   }
   return response;
 }
@@ -82,7 +97,22 @@ export async function editCardDesc(params) {
     description: params.description,
   });
   if (response.isSuccess) {
-    console.log("başarılı");
+    store.dispatch(
+      pushNotification({
+        content: response.message,
+        duration: 5000,
+        severity: "success",
+      })
+    );
+  }
+  else {
+    store.dispatch(
+      pushNotification({
+        severity: "error",
+        content: response.message,
+        duration: 3000,
+      })
+    );
   }
   return response;
 }
@@ -99,6 +129,7 @@ export async function moveCard(moveArgs) {
   if (!response.isSuccess) {
     store.dispatch(moveCardBackward(moveArgs));
   }
+  
 
   return response;
 }
@@ -109,11 +140,28 @@ export async function addLabelToCard(cardId, boardLabelId) {
     .board.currentBoard.labels.find((l) => l.id === boardLabelId);
 
   if (response.isSuccess) {
+    debugger;
     store.dispatch(
       changeLabel({
         cardId: cardId,
         boardLabel: boardLabel,
         isAdded: true,
+      })
+    );
+    store.dispatch(
+      pushNotification({
+        content: response.message,
+        duration: 5000,
+        severity: "success",
+      })
+    );
+  }
+  else {
+    store.dispatch(
+      pushNotification({
+        severity: "error",
+        content: response.message,
+        duration: 3000,
       })
     );
   }
@@ -136,6 +184,15 @@ export async function removeLabelFromCard(cardId, boardLabelId) {
       })
     );
   }
+  else {
+    store.dispatch(
+      pushNotification({
+        severity: "error",
+        content: response.message,
+        duration: 3000,
+      })
+    );
+  }
 
   return response;
 }
@@ -149,7 +206,22 @@ export async function editCheckListItem(params) {
     content: params.content,
   });
   if (response.isSuccess) {
-    console.log("başarılı");
+    store.dispatch(
+      pushNotification({
+        content: response.message,
+        duration: 5000,
+        severity: "success",
+      })
+    );
+  }
+  else {
+    store.dispatch(
+      pushNotification({
+        severity: "error",
+        content: response.message,
+        duration: 3000,
+      })
+    );
   }
   return response;
 }
@@ -161,7 +233,22 @@ export async function addCheckListItem(params) {
     content: params.content,
   });
   if (response.isSuccess) {
-    console.log("başarılı");
+    store.dispatch(
+      pushNotification({
+        content: response.message,
+        duration: 5000,
+        severity: "success",
+      })
+    );
+  }
+  else {
+    store.dispatch(
+      pushNotification({
+        severity: "error",
+        content: response.message,
+        duration: 3000,
+      })
+    );
   }
   return response;
 }
@@ -172,7 +259,22 @@ export async function addCheckList(params) {
     title: params.title,
   });
   if (response.isSuccess) {
-    console.log("başarılı");
+    store.dispatch(
+      pushNotification({
+        content: response.message,
+        duration: 5000,
+        severity: "success",
+      })
+    );
+  }
+  else {
+    store.dispatch(
+      pushNotification({
+        severity: "error",
+        content: response.message,
+        duration: 3000,
+      })
+    );
   }
   return response;
 }
@@ -184,7 +286,22 @@ export async function editCheckListTitle(params) {
     newTitle: params.newTitle,
   });
   if (response.isSuccess) {
-    console.log("başarılı");
+    store.dispatch(
+      pushNotification({
+        content: response.message,
+        duration: 5000,
+        severity: "success",
+      })
+    );
+  }
+  else {
+    store.dispatch(
+      pushNotification({
+        severity: "error",
+        content: response.message,
+        duration: 3000,
+      })
+    );
   }
   return response;
 }
@@ -195,7 +312,22 @@ export async function removeCheckList(params) {
     checkListId: params.checkListId,
   });
   if (response.isSuccess) {
-    console.log("başarılı");
+    store.dispatch(
+      pushNotification({
+        content: response.message,
+        duration: 5000,
+        severity: "success",
+      })
+    );
+  }
+  else {
+    store.dispatch(
+      pushNotification({
+        severity: "error",
+        content: response.message,
+        duration: 3000,
+      })
+    );
   }
   return response;
 }
@@ -207,7 +339,13 @@ export async function removeCheckListItem(params) {
     checkListItemId: params.checkListItemId,
   });
   if (response.isSuccess) {
-    console.log("başarılı");
+    store.dispatch(
+      pushNotification({
+        content: response.message,
+        duration: 5000,
+        severity: "success",
+      })
+    );
   }
   return response;
 }
@@ -218,7 +356,22 @@ export async function addComment(params) {
     comment: params.comment,
   });
   if (response.isSuccess) {
-    console.log("başarılı");
+    store.dispatch(
+      pushNotification({
+        content: response.message,
+        duration: 5000,
+        severity: "success",
+      })
+    );
+  }
+  else {
+    store.dispatch(
+      pushNotification({
+        severity: "error",
+        content: response.message,
+        duration: 3000,
+      })
+    );
   }
   return response;
 }
@@ -230,7 +383,22 @@ export async function editCardDate(params) {
     endDate: params.endDate === undefined ? null : params.endDate,
   });
   if (response.isSuccess) {
-    console.log("başarılı");
+    store.dispatch(
+      pushNotification({
+        content: response.message,
+        duration: 5000,
+        severity: "success",
+      })
+    );
+  }
+  else {
+    store.dispatch(
+      pushNotification({
+        severity: "error",
+        content: response.message,
+        duration: 3000,
+      })
+    );
   }
   return response;
 }
@@ -248,7 +416,22 @@ export async function handleCardMovedEvent(notification) {
 export async function deleteCard(cardId) {
   const response = await cardApi.deleteCard(cardId);
   if (response.isSuccess) {
-    console.log("başarılı");
+    store.dispatch(
+      pushNotification({
+        content: response.message,
+        duration: 5000,
+        severity: "success",
+      })
+    );
+  }
+  else {
+    store.dispatch(
+      pushNotification({
+        severity: "error",
+        content: response.message,
+        duration: 3000,
+      })
+    );
   }
   return response;
 }
