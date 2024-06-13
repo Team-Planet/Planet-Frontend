@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Navigate } from "react-router-dom";
-import { getCurrentBoard, addList } from "../services/boardService";
+import { getCurrentBoard, addList, inviteMember } from "../services/boardService";
 import { Box, CircularProgress, Stack, Button, Container } from "@mui/material";
 import ButtonLoading from "../components/ButtonLoading";
 import AddIcon from "@mui/icons-material/Add";
@@ -19,6 +19,7 @@ import CardModal from "../components/CardModal";
 import MainLayout from "../layout/MainLayout";
 import "../styles/BoardPage.css";
 import { useSignalR } from "../contexts/SignalRContext";
+import PersonIcon from '@mui/icons-material/Person';
 
 export default function BoardPage() {
   const { id } = useParams();
@@ -127,6 +128,11 @@ export default function BoardPage() {
     setCardEndDate(response.body.endDate?.split("T")[0]);
     setStateOfCard(true);
   }
+
+  async function handleInvitation() {
+    await inviteMember(id);
+  }
+
   return (
     <MainLayout>
       {isLoading ? (
@@ -142,6 +148,9 @@ export default function BoardPage() {
         </Box>
       ) : (
         <Container maxWidth="xl">
+          <Box sx={{px:5, py:1}}>
+            <Button onClick={handleInvitation} startIcon={<PersonIcon />} variant="outlined" color="turqoise">DAVET BAĞLANTISI OLUŞTUR</Button>
+          </Box>
           <Box
             sx={{
               display: "flex",
@@ -175,13 +184,13 @@ export default function BoardPage() {
                   justifyContent="center"
                   style={{ margin: "0 auto" }}
                 >
-                  {currentBoard?.lists?.map((list) => (
+                  {currentBoard?.lists?.map((list, index) => (
                     <Droppable
                       key={list.id.toString()}
                       droppableId={list.id.toString()}
                     >
                       {(provided) => (
-                        <BoardList list={list} provided={provided}>
+                        <BoardList list={list} provided={provided} isFirst={index === 0} isLast={index === currentBoard.lists.length - 1}>
                           {listCards
                             ?.filter((c) => c.listId === list.id)
                             .map((card, index) => (

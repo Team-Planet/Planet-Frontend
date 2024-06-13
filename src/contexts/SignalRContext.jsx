@@ -1,6 +1,7 @@
 import React, { createContext, useContext } from "react";
 import * as signalR from "@microsoft/signalr";
-import { handleCardMovedEvent } from "../services/cardService";
+import { handleCardMovedEvent, handleCardTitleChangedEvent } from "../services/cardService";
+import { handleBoardListOrderChangedEvent, handleBoardListTitleChangedEvent } from "../services/boardService";
 
 const SignalRContext = createContext();
 
@@ -14,6 +15,7 @@ const connection = new signalR.HubConnectionBuilder()
     skipNegotiation: true,
     transport: signalR.HttpTransportType.WebSockets,
   })
+  .withAutomaticReconnect()
   .configureLogging(signalR.LogLevel.Information)
   .build();
 
@@ -28,6 +30,19 @@ async function connect() {
 
 connection.on("ReceiveCardMovedEvent", (notification) => {
   handleCardMovedEvent(notification);
+});
+
+connection.on("ReceiveCardTitleChangedEvent", notification => {
+  handleCardTitleChangedEvent(notification);
+});
+
+connection.on("ReceiveBoardListTitleChangedEvent", notification => {
+  handleBoardListTitleChangedEvent(notification);
+});
+
+connection.on("ReceiveBoardListOrderChangedEvent", notification => {
+  debugger;
+  handleBoardListOrderChangedEvent(notification);
 });
 
 connect();

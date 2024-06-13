@@ -51,6 +51,9 @@ export const cardSlice = createSlice({
     createListCard(state, action) {
       state.listCards.push(action.payload);
       state.listCards.sort((a, b) => a.order - b.order);
+    },
+    changeCardTitle(state, action) {
+      state.listCards.find(c => c.id === action.payload.id).title = action.payload.title;
     }
   },
 });
@@ -62,6 +65,7 @@ export const {
   moveCardForward,
   moveCardBackward,
   changeLabel,
-  createListCard
+  createListCard,
+  changeCardTitle
 } = cardSlice.actions;
 export default cardSlice.reducer;

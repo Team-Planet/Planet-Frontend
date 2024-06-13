@@ -10,6 +10,7 @@ import SignalRProvider from "./contexts/SignalRContext";
 import { grey } from "@mui/material/colors";
 import { ThemeProvider } from "@emotion/react";
 import { createTheme } from "@mui/material";
+import InvitationPage from "./pages/InvitationPage";
 
 const theme = createTheme({
   palette: {
@@ -42,6 +43,7 @@ function App() {
             <Route path="/SignIn" element={<SignInPage />} />
             <Route path="/SignUp" element={<SignUpPage />} />
             <Route path="/Boards/:id" element={<BoardPage />} />
+            <Route path="/Invitation/:key" element={<InvitationPage />} />
           </Routes>
           {<Notification />}
         </ThemeProvider>

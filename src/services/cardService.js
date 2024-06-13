@@ -6,6 +6,7 @@ import {
   moveCardForward,
   changeLabel,
   createListCard,
+  changeCardTitle,
 } from "../data/cardSlice";
 import { store } from "../data/store";
 
@@ -250,4 +251,11 @@ export async function deleteCard(cardId) {
     console.log("başarılı");
   }
   return response;
+}
+
+export function handleCardTitleChangedEvent(notification) {
+  store.dispatch(changeCardTitle({
+    id: notification.id,
+    title: notification.title
+  }));
 }
